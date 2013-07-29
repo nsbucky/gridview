@@ -1,5 +1,4 @@
 # GridView
-========
 Inspired by Yii's CGridView, this class strives to be a simple way to generate a table from an array, ie; a database result set. It works off of an array of arrays, or an array of objects. You decide which array columns or object properties to display. It does not rewrite queries or handle paging, that is up to you.
 
 ## Features
@@ -66,6 +65,7 @@ GridView offers a few different column types for calculations or displaying cert
 		)) 
 	);
 
+	// or via array access
 	$table[] = array('name'=>'loop_iterator');
 
 	echo (string) $table; // renders table

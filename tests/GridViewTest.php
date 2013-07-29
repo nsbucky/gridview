@@ -1,5 +1,13 @@
 <?php
 
+require __DIR__.'/../GridView/Table.php';
+require __DIR__.'/../GridView/Columns/Column.php';
+require __DIR__.'/../GridView/Columns/CalcColumn.php';
+require __DIR__.'/../GridView/Columns/CheckBoxColumn.php';
+require __DIR__.'/../GridView/Columns/DateTimeColumn.php';
+require __DIR__.'/../GridView/Columns/TotalColumn.php';
+require __DIR__.'/../GridView/Columns/LinkColumn.php';
+
 class GridViewTest extends PHPUnit_Framework_TestCase {
 
 	public $dataSourceArray = array();
@@ -41,6 +49,7 @@ class GridViewTest extends PHPUnit_Framework_TestCase {
     
     public function testAddColumn()
 	{       
+        $i = 5;
         $dataSource = array(
             array('uniqid'=>uniqid(), 'loop_iterator'=>$i.' times','date'=>date('Y-m-d'),'total'=>rand(1,25))
         );
@@ -91,9 +100,64 @@ class GridViewTest extends PHPUnit_Framework_TestCase {
             $string
         );
 	}
+
+    public function testAddColumnAsArray()
+    {       
+        $i = 5;
+        $dataSource = array(
+            array('uniqid'=>uniqid(), 'loop_iterator'=>$i.' times','date'=>date('Y-m-d'),'total'=>rand(1,25))
+        );
+        $table = new GridView\Table($dataSource);
+        $table[] = new GridView\Columns\Column(array(
+            'name'=>'uniqid',
+            'sortable'=>true
+        ));
+        $string = $table->render();    
+        #echo $string;
+        $this->assertTag(
+            array(
+                'tag'=>'table',                       
+                'attributes'=>array(
+                    'class'=>'table table-bordered table-striped',                  
+                ),
+                'child'=>array(
+                    'tag'=>'thead',   
+                    'descendant'=>array(
+                        'tag'=>'tr',
+                        'attributes'=>array(
+                            'class'=>'grid-view-headers'
+                        ),
+                        'descendant'=>array(
+                            'tag'=>'th',
+                            'child'=>array(
+                                'tag'=>'a',
+                                'attributes'=>array(
+                                    'href'=>'?sort=uniqid&sort_dir=ASC',
+                                    'class'=>'sort-link'
+                                ),
+                                'content'=>'Uniqid'
+                            )
+                        )
+                    )
+                ),
+                'child'=>array(
+                    'tag'=>'tbody',
+                    'descendant'=>array(
+                        'tag'=>'tr',
+                        'descendant'=>array(
+                            'tag'=>'td',
+                            'content'=>$dataSource[0]['uniqid']
+                        )
+                    )                    
+                )
+            ),            
+            $string
+        );
+    }
     
     public function testRenderHeader()
     {
+        $i = 3;
         $dataSource = array(
             array('uniqid'=>uniqid(), 'loop_iterator'=>$i.' times','date'=>date('Y-m-d'),'total'=>rand(1,25))
         );
@@ -289,7 +353,7 @@ class GridViewTest extends PHPUnit_Framework_TestCase {
         $_GET['sort'] = 'uniqid';
         $_GET['sort_dir'] = 'DESC';
         
-        $table = new GridView\Table($dataSource, $options);
+        $table = new GridView\Table($dataSource);
         $table->addColumn(array(
             'name'=>'uniqid',
             'sortable'=>true
