@@ -1,0 +1,384 @@
+<?php
+
+class GridViewTest extends PHPUnit_Framework_TestCase {
+
+	public $dataSourceArray = array();
+	public $dataSourceObject;
+
+	public function __construct()
+	{
+
+		for($i=1; $i<=10; $i++) {
+			$this->dataSourceArray[] = array('uniqid'=>uniqid(), 'loop_iterator'=>$i.' times','date'=>date('Y-m-d'),'total'=>rand(1,25));	
+		}
+
+		for($i=1; $i<=10; $i++) {
+			$this->dataSourceObject[] = (object) array('uniqid'=>uniqid(), 'loop_iterator'=>$i.' times','date'=>date('Y-m-d'),'total'=>rand(1,25));	
+		}
+		return parent::__construct();
+	}
+
+	public function testCreateTable()
+	{
+        $table = new GridView\Table($this->dataSourceArray);
+        $string = $table->render();       
+        $this->assertTag(
+            array(
+                'tag'=>'table',                       
+				'attributes'=>array(
+					'class'=>'table table-bordered table-striped',					
+                ),
+                'child'=>array(
+                    'tag'=>'thead',                    
+                ),
+                'child'=>array(
+                    'tag'=>'tbody',                    
+                ),
+            ),            
+            $string
+        );
+	}
+    
+    public function testAddColumn()
+	{       
+        $dataSource = array(
+            array('uniqid'=>uniqid(), 'loop_iterator'=>$i.' times','date'=>date('Y-m-d'),'total'=>rand(1,25))
+        );
+        $table = new GridView\Table($dataSource);
+        $table->addColumn(new GridView\Columns\Column(array(
+            'name'=>'uniqid',
+            'sortable'=>true
+        )) );
+        $string = $table->render();    
+        #echo $string;
+        $this->assertTag(
+            array(
+                'tag'=>'table',                       
+				'attributes'=>array(
+					'class'=>'table table-bordered table-striped',					
+                ),
+                'child'=>array(
+                    'tag'=>'thead',   
+                    'descendant'=>array(
+                        'tag'=>'tr',
+                        'attributes'=>array(
+                            'class'=>'grid-view-headers'
+                        ),
+                        'descendant'=>array(
+                            'tag'=>'th',
+                            'child'=>array(
+                                'tag'=>'a',
+                                'attributes'=>array(
+                                    'href'=>'?sort=uniqid&sort_dir=ASC',
+                                    'class'=>'sort-link'
+                                ),
+                                'content'=>'Uniqid'
+                            )
+                        )
+                    )
+                ),
+                'child'=>array(
+                    'tag'=>'tbody',
+                    'descendant'=>array(
+                        'tag'=>'tr',
+                        'descendant'=>array(
+                            'tag'=>'td',
+                            'content'=>$dataSource[0]['uniqid']
+                        )
+                    )                    
+                )
+            ),            
+            $string
+        );
+	}
+    
+    public function testRenderHeader()
+    {
+        $dataSource = array(
+            array('uniqid'=>uniqid(), 'loop_iterator'=>$i.' times','date'=>date('Y-m-d'),'total'=>rand(1,25))
+        );
+        $table = new GridView\Table($dataSource);
+        $table->addColumn(new GridView\Columns\Column(array(
+            'name'=>'uniqid',
+            'sortable'=>true
+        )) );
+        $string = $table->render();    
+        #echo $string;
+        $this->assertTag(
+            array(
+                'tag'=>'table',                       
+				'attributes'=>array(
+					'class'=>'table table-bordered table-striped',					
+                ),
+                'child'=>array(
+                    'tag'=>'thead',   
+                    'descendant'=>array(
+                        'tag'=>'tr',
+                        'attributes'=>array(
+                            'class'=>'grid-view-headers'
+                        ),
+                        'descendant'=>array(
+                            'tag'=>'th',
+                            'child'=>array(
+                                'tag'=>'a',
+                                'attributes'=>array(
+                                    'href'=>'?sort=uniqid&sort_dir=ASC',
+                                    'class'=>'sort-link'
+                                ),
+                                'content'=>'Uniqid'
+                            )
+                        )
+                    )
+                ),
+            ),            
+            $string
+        );
+    }
+    
+    public function testTotalColumn()
+    {
+        $table = new GridView\Table($this->dataSourceArray);
+        $table->addColumn(new GridView\Columns\TotalColumn(array(
+            'name'=>'total',
+        )) );
+        
+        $string = $table->render();    
+        #echo $string;
+        $this->assertTag(
+            array(
+                'tag'=>'table',                       
+				'attributes'=>array(
+					'class'=>'table table-bordered table-striped',					
+                ),
+                'child'=>array(
+                    'tag'=>'tfoot',   
+                    'descendant'=>array(
+                        'tag'=>'tr',
+                        'descendant'=>array(
+                            'tag'=>'td',
+                            //'content'=>"{$dataSource[0]['total']}"
+                        )
+                    )
+                ),
+            ),            
+            $string
+        );
+    }   
+    
+    public function testLinkColumn()
+    {
+        $dataSource = array(
+            array('uniqid'=>'123', 'loop_iterator'=> ' times','date'=>date('Y-m-d'),'total'=>rand(1,25))
+        );
+        
+        $table = new GridView\Table($dataSource);
+        $table->addColumn(new GridView\Columns\LinkColumn(array(
+            'url'=>'/index/view/id/{uniqid}',
+            'label'=>'My Butt Hole'
+        )));
+        
+        $string = $table->render();    
+        #echo $string;
+        $this->assertTag(
+            array(
+                'tag'=>'td',
+                'child'=>array(
+                    'tag'=>'a',
+                    'attributes'=>array(
+                        'href'=>'/index/view/id/123',
+                    ),
+                    'content'=>'My Butt Hole'
+                )
+            ),            
+            $string
+        );
+    }
+    
+    public function testCalcColumn()
+    {
+        $dataSource = array(
+            array('uniqid'=>'123', 'loop_iterator'=>'4 times','date'=>date('Y-m-d'),'total'=>rand(1,25))
+        );
+        
+        $table = new GridView\Table($dataSource);
+        $table->addColumn(new GridView\Columns\CalcColumn(array(
+            'name'=>'total',
+            'calculation'=>function($data){
+                return 'hi';//$data['total'] + 100;
+            }
+        )));
+        #echo $dataSource[0]['total'] + 100;
+        $string = $table->render();    
+        #echo $string;
+        $this->assertTag(
+            array(
+                'tag'=>'td',
+                'content'=>'hi',
+            ),            
+            $string
+        );
+    }
+    
+    public function testCheckBoxColumn()
+    {
+        $dataSource = array(
+            array('uniqid'=>'123', 'loop_iterator'=>'4 times','date'=>date('Y-m-d'),'total'=>rand(1,25))
+        );
+        
+        $table = new GridView\Table($dataSource);
+        $table->addColumn(new GridView\Columns\CheckBoxColumn(array(
+            'name'=>'loop_iterator',
+            'checked'=>function($data) {
+                return $data['loop_iterator'] == "4 times";
+            }
+        )));
+        $string = $table->render();
+        #echo $string;
+        $this->assertTag(
+            array(
+                'tag'=>'input',
+                'attributes'=>array(
+                    'checked'=>'checked',
+                    'value'=>'4 times',
+                    'type'=>'checkbox'
+                )
+            ),            
+            $string
+        );
+    }
+    
+    public function testDateTimeColumn()
+    {
+        $dataSource = array(
+            array('uniqid'=>'123', 'loop_iterator'=>'4 times','date'=>date('Y-m-d'),'total'=>rand(1,25))
+        );
+        
+        $table = new GridView\Table($dataSource);
+        $table->addColumn(new GridView\Columns\DateTimeColumn(array(
+            'name'=>'date',            
+        )));
+        $string = $table->render();
+        #echo $string;
+        $this->assertTag(
+            array(
+                'tag'=>'td',
+                'content'=>date('Y-m-d 00:00:00')
+            ),            
+            $string
+        );
+    }
+    
+    public function testSetConfigOptions()
+    {
+        $dataSource = array(
+            array('uniqid'=>'123', 'loop_iterator'=>'4 times','date'=>date('Y-m-d'),'total'=>rand(1,25))
+        );
+        
+        $options = array('sortDirection'=>'DESC');
+        $table = new GridView\Table($dataSource, $options);
+        
+        $this->assertEquals('DESC', $table->sortDirection);
+    }
+    
+    public function testSetSortDirectionFromUrl()
+    {
+        $dataSource = array(
+            array('uniqid'=>'123', 'loop_iterator'=>'4 times','date'=>date('Y-m-d'),'total'=>rand(1,25))
+        );
+        
+        $_GET['sort'] = 'uniqid';
+        $_GET['sort_dir'] = 'DESC';
+        
+        $table = new GridView\Table($dataSource, $options);
+        $table->addColumn(array(
+            'name'=>'uniqid',
+            'sortable'=>true
+        ));
+        $string = $table->render();
+        #echo $string;
+        $this->assertTag(array(
+            'tag'=>'th',
+            'descendant'=>array(
+                    'tag'=>'a',
+                    'attributes'=>array(
+                        'href'=>'?sort=uniqid&sort_dir=ASC',
+                        'class'=>'sort-link'
+                    ),
+                )
+            ),
+            $string
+        );
+        
+    }
+    
+    public function testGetTableRowCss()
+    {
+        $dataSource = array(
+            array('uniqid'=>'123', 'loop_iterator'=>'4 times','date'=>date('Y-m-d'),'total'=>rand(1,25))
+        );
+        
+        
+        $table = new GridView\Table($dataSource, array(
+            'tableRowCss'=>function($data){
+                return 'table-row';
+            }
+        ));
+        
+        $table->addColumn(array(
+            'name'=>'uniqid',
+            'sortable'=>true
+        ));
+        
+        $this->assertEquals('table-row', $table->getTableRowCss(array(), 0));
+        
+        #$string = $table->render();
+    }
+    
+    public function testShowItemsPerPage()
+    {
+        // not sure why this test fails. its really gay.
+        $table = new GridView\Table($this->dataSourceArray, array('showItemsPerPageHeader'=>true));
+        $string = $table->renderItemsPerPage();
+        #echo $string;
+        #return;
+        $this->assertTag(array(
+            'tag'=>'div',    
+            'attributes'=>array(
+                    'class'=>'row-fluid'
+                ),
+            'descendant'=>array(
+                    'tag'=>'div',
+                    'attributes'=>array(
+                        'class'=>'pull-right span3'
+                    ),
+                    'descendant'=>array(
+                        'tag'=>'select',
+                        'id'=>'grid-view-limit',
+                        'attributes'=>array(
+                            'name'=>'limit'
+                        ),
+                        'children'=>array(
+                            'count'=>4,
+                            'only'=>array('tag'=>'option')
+                        )
+                    )
+                )
+            ),
+            $string
+        );
+    }
+    
+    public function testSortUrl()
+    {
+        $table = new GridView\Table($this->dataSourceArray, array('showItemsPerPageHeader'=>true));
+        $table->sortUrl = 'index.php';
+        
+        $url = $table->getSortUrl('uniqid');
+        $this->assertEquals('index.php?sort=uniqid&sort_dir=ASC', $url);
+        
+        $table->sortUrl = 'index.php?nuts=balls';
+        
+        $url = $table->getSortUrl('uniqid');
+        $this->assertEquals('index.php?nuts=balls&sort=uniqid&sort_dir=ASC', $url);
+    }
+}
