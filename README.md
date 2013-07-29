@@ -1,6 +1,5 @@
 # GridView
 ========
-
 Inspired by Yii's CGridView, this class strives to be a simple way to generate a table from an array, ie; a database result set. It works off of an array of arrays, or an array of objects. You decide which array columns or object properties to display. It does not rewrite queries or handle paging, that is up to you.
 
 ## Features
@@ -19,10 +18,6 @@ GridView offers a few different column types for calculations or displaying cert
 - DateTimeColumn: Use php's DateTime object to format date strings
 - LinkColumn: generate anchor tags
 - TotalColumn: sum columns and puts a total in the table footer
-
-## Quick Start
-In the `require` key of `composer.json` file add the following
-    "nsbucky/gridview": "dev-master"
 
 ## Quick Example
 	$dataSource = $dataSource = array(
