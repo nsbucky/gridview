@@ -1,12 +1,19 @@
 <?php
 
 require __DIR__.'/../GridView/Table.php';
+require __DIR__.'/../GridView/Columns/ColumnInterface.php';
+require __DIR__.'/../GridView/Buttons/ButtonInterface.php';
 require __DIR__.'/../GridView/Columns/Column.php';
 require __DIR__.'/../GridView/Columns/CalcColumn.php';
 require __DIR__.'/../GridView/Columns/CheckBoxColumn.php';
 require __DIR__.'/../GridView/Columns/DateTimeColumn.php';
 require __DIR__.'/../GridView/Columns/TotalColumn.php';
 require __DIR__.'/../GridView/Columns/LinkColumn.php';
+require __DIR__.'/../GridView/Columns/ButtonColumn.php';
+require __DIR__.'/../GridView/Buttons/Button.php';
+require __DIR__.'/../GridView/Buttons/ViewButton.php';
+require __DIR__.'/../GridView/Buttons/EditButton.php';
+require __DIR__.'/../GridView/Buttons/DeleteButton.php';
 
 class GridViewTest extends PHPUnit_Framework_TestCase {
 
@@ -15,7 +22,6 @@ class GridViewTest extends PHPUnit_Framework_TestCase {
 
 	public function __construct()
 	{
-
 		for($i=1; $i<=10; $i++) {
 			$this->dataSourceArray[] = array('uniqid'=>uniqid(), 'loop_iterator'=>$i.' times','date'=>date('Y-m-d'),'total'=>rand(1,25));	
 		}
@@ -444,5 +450,104 @@ class GridViewTest extends PHPUnit_Framework_TestCase {
         
         $url = $table->getSortUrl('uniqid');
         $this->assertEquals('index.php?nuts=balls&sort=uniqid&sort_dir=ASC', $url);
+    }
+
+    public function testButton()
+    {
+        $options = array(
+            'url'=>'/',
+            'label'=>'{fart} Button!',
+            'tokens'=>array('{fart}'=>'Fart')
+        );
+        $button = new GridView\Buttons\Button($options);
+        $string = $button->render();
+
+        $this->assertTag(array(
+            'tag'=>'a',
+            'content'=>'Fart Button!',
+            'attributes'=>array(
+                    'class'=>'btn btn-small'
+                )
+            ), 
+            $string
+        );
+    }
+
+    public function testViewButton()
+    {
+        $button = new GridView\Buttons\ViewButton('/');
+        $string = $button->render();
+
+        $this->assertTag(array(
+            'tag'=>'a',
+            'content'=>'View',
+            'attributes'=>array(
+                    'class'=>'btn btn-info',
+                    'href'=>'/'
+                )
+            ), 
+            $string
+        );
+    }
+
+    public function testEditButton()
+    {
+
+        $button = new GridView\Buttons\EditButton('/');
+        $string = $button->render();
+
+        $this->assertTag(array(
+            'tag'=>'a',
+            'content'=>'Edit',
+            'attributes'=>array(
+                    'class'=>'btn btn-success',
+                    'href'=>'/'
+                )
+            ), 
+            $string
+        );
+    }
+
+    public function testDeleteButton()
+    {
+        $button = new GridView\Buttons\DeleteButton('/');
+        $string = $button->render();
+        #echo $string;
+        $this->assertTag(array(
+            'tag'=>'form',            
+            'attributes'=>array(
+                    'method'=>'post',
+                    'action'=>'/',
+                    'class'=>'form-inline'
+                ),
+            'descendant'=>array(
+                    'tag'=>'input',
+                    'attributes'=>array(
+                        'type'=>'submit',
+                        'class'=>'btn btn-danger btn-small',
+                        'value'=>'Delete',
+                        'onclick'=>'return confirm(\'Are you sure you want to do this?\')'
+                    )
+                )
+            ), 
+            $string
+        );
+    }
+
+    public function testButtonColumn()
+    {
+        $table = new GridView\Table($this->dataSourceArray);
+        $table[] = array('name'=>'uniqid');
+        $table[] = new GridView\Columns\ButtonColumn(array(
+            'buttons'=>array(
+                new GridView\Buttons\ViewButton('/view'),
+                new GridView\Buttons\EditButton('/edit'),
+                new GridView\Buttons\DeleteButton('/delete'),
+            )
+        ));
+
+        $output = $table->render();
+        // will finish in a bit. sorry about that.
+        #echo $output;
     }
 }

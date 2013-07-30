@@ -1,7 +1,6 @@
 <?php namespace GridView\Columns;
 
-class Column
-{
+class Column implements ColumnInterface {
 	// none of these values are escaped.
 	public $header, $value, $name, $filter,
 	       $rowCss, $cellCss;
@@ -82,7 +81,7 @@ class Column
 		return (bool) $this->visible;
 	}
 
-	protected function tokenize($data)
+	public function tokenize($data)
 	{
 		if(count($this->tokens)) return $this->tokens;
 

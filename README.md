@@ -18,27 +18,22 @@ GridView offers a few different column types for calculations or displaying cert
 - LinkColumn: generate anchor tags
 - TotalColumn: sum columns and puts a total in the table footer
 
+### Required setup
+
+In the `require` key of `composer.json` file add the following
+
+    "nsbucky/gridview": "dev-master"
+
 ## Quick Example
-	$dataSource = $dataSource = array(
-		            array(
+	$dataSource = array();
+	for($i=0; $i<10; $i++) {
+		$dataSource[] = array(
 		            	'uniqid'=>uniqid(), 
 		            	'loop_iterator'=>$i.' times',
 		            	'date'=>date('Y-m-d'),
 		            	'total'=>rand(1,25)
-		           	),
-		           	array(
-		            	'uniqid'=>uniqid(), 
-		            	'loop_iterator'=>$i.' times',
-		            	'date'=>date('Y-m-d'),
-		            	'total'=>rand(1,25)
-		           	),
-		           	array(
-		            	'uniqid'=>uniqid(), 
-		            	'loop_iterator'=>$i.' times',
-		            	'date'=>date('Y-m-d'),
-		            	'total'=>rand(1,25)
-		           	)
-		        );
+		           	);		        
+	}
 
 	$table = new GridView\Table($dataSource);
 	$table->addColumn(
