@@ -17,6 +17,7 @@ GridView offers a few different column types for calculations or displaying cert
 - DateTimeColumn: Use php's DateTime object to format date strings
 - LinkColumn: generate anchor tags
 - TotalColumn: sum columns and puts a total in the table footer
+- ButtonColumn: useful for actions like view/edit/delete or whatever you would like. Comes with sample buttons
 
 ### Required setup
 
@@ -60,7 +61,16 @@ In the `require` key of `composer.json` file add the following
 		)) 
 	);
 
+
 	// or via array access
 	$table[] = array('name'=>'loop_iterator');
+
+	$table[] = new GridView\Columns\ButtonColumn(array(
+            'buttons'=>array(
+                new GridView\Buttons\ViewButton('/view'),
+                new GridView\Buttons\EditButton('/edit'),
+                new GridView\Buttons\DeleteButton('/delete'),
+            )
+        ));
 
 	echo (string) $table; // renders table
