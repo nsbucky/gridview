@@ -67,11 +67,11 @@ class Column implements ColumnInterface {
 			return $this->value;
 		}
 
-		if(is_array($data) && array_key_exists($this->name, $data)) {
+		if(is_array($data)) {
 			return htmlspecialchars($data[$this->name], ENT_QUOTES);
 		}
 
-		if(is_object($data) && isset($data->{$this->name})) {
+		if(is_object($data)) {
 			return htmlspecialchars($data->{$this->name}, ENT_QUOTES);
 		}
 	}

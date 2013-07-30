@@ -107,6 +107,60 @@ class GridViewTest extends PHPUnit_Framework_TestCase {
         );
 	}
 
+    public function testAddColumnFromObject()
+    {       
+        $i = 5;
+        $dataSource = array(
+            (object) array('uniqid'=>uniqid(), 'loop_iterator'=>$i.' times','date'=>date('Y-m-d'),'total'=>rand(1,25))
+        );
+        $table = new GridView\Table($dataSource);
+        $table->addColumn(new GridView\Columns\Column(array(
+            'name'=>'uniqid',
+            'sortable'=>true
+        )) );
+        $string = $table->render();    
+        #echo $string;
+        $this->assertTag(
+            array(
+                'tag'=>'table',                       
+                'attributes'=>array(
+                    'class'=>'table table-bordered table-striped',                  
+                ),
+                'child'=>array(
+                    'tag'=>'thead',   
+                    'descendant'=>array(
+                        'tag'=>'tr',
+                        'attributes'=>array(
+                            'class'=>'grid-view-headers'
+                        ),
+                        'descendant'=>array(
+                            'tag'=>'th',
+                            'child'=>array(
+                                'tag'=>'a',
+                                'attributes'=>array(
+                                    'href'=>'?sort=uniqid&sort_dir=ASC',
+                                    'class'=>'sort-link'
+                                ),
+                                'content'=>'Uniqid'
+                            )
+                        )
+                    )
+                ),
+                'child'=>array(
+                    'tag'=>'tbody',
+                    'descendant'=>array(
+                        'tag'=>'tr',
+                        'descendant'=>array(
+                            'tag'=>'td',
+                            'content'=>$dataSource[0]->uniqid
+                        )
+                    )                    
+                )
+            ),            
+            $string
+        );
+    }
+
     public function testAddColumnAsArray()
     {       
         $i = 5;
