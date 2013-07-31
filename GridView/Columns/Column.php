@@ -89,7 +89,7 @@ class Column implements ColumnInterface {
             $data = $data->toArray();
         }
 
-		foreach($data as $key=>$value) {
+		foreach((array) $data as $key=>$value) {
 			$this->tokens['{'.$key.'}'] = $value;
 		}
 
