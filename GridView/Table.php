@@ -191,7 +191,7 @@ class Table implements \ArrayAccess {
 jQuery(function(){
 	$("#grid-view-<?php echo $this->itemsPerPageIdentifier?>").change(function(){
 	        var values = $('#<?php echo $this->id;?> .grid-view-filters :input').serialize();
-			window.location = window.pathname+'?'+values+"&<?php echo $this->itemsPerPageIdentifier?>="+$(this).val();
+			window.location = window.location.pathname+'?'+values+"&<?php echo $this->itemsPerPageIdentifier?>="+$(this).val();
 	});
 });
 <?php $this->javascript .= ob_get_clean();?>
