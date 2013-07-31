@@ -85,6 +85,10 @@ class Column implements ColumnInterface {
 	{
 		if(count($this->tokens)) return $this->tokens;
 
+		if(is_object($data) && method_exists($data, 'toArray')) {
+            $data = $data->toArray();
+        }
+
 		foreach($data as $key=>$value) {
 			$this->tokens['{'.$key.'}'] = $value;
 		}
