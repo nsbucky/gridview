@@ -51,7 +51,7 @@ class Column implements ColumnInterface {
 		if (!isset($this->filter)) {
 			return sprintf(
 				'<div class="grid-view-filter-container">
-				<input type="text" name="%s" style="width:100%%" class="grid-view-filter" value="%s">
+				<input type="text" name="%s" style="width:100%%" class="grid-view-filter input-small form-control" value="%s">
 				</div>',
 				$this->name,
 				$value
