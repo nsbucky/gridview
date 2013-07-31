@@ -42,9 +42,20 @@ class Column implements ColumnInterface {
 
 	public function getFilter()
 	{
+		$value = null;
+		
+		if(isset($_GET[$this->name])) {
+			$value = htmlentities($this->name, ENT_QUOTES);
+		}
+
 		if (!isset($this->filter)) {
-			return sprintf('<div class="grid-view-filter-container"><input type="text" name="%s" style="width:100%%" class="grid-view-filter"></div>',
-				           $this->name);
+			return sprintf(
+				'<div class="grid-view-filter-container">
+				<input type="text" name="%s" style="width:100%%" class="grid-view-filter" value="%s">
+				</div>',
+				$this->name,
+				$value
+			);
 		}
 
 		return $this->filter;
