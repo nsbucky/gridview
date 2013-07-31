@@ -36,7 +36,8 @@ class Column implements ColumnInterface {
 
 	public function setData($data)
 	{
-		$this->data = $data;		
+		$this->data = $data;	
+		$this->tokenize($data);	
 		return $this;
 	}
 
@@ -114,8 +115,7 @@ class Column implements ColumnInterface {
 
 	public function getTokens()
 	{
-		if(count($this->tokens)) return $this->tokens;
-		return $this->tokenize($this->data);		
+		return $this->tokens;		
 	}
 
 	public function getJavaScript()

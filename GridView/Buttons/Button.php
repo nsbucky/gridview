@@ -38,11 +38,7 @@ class Button implements ButtonInterface {
 			return $func($data);
 		}
 
-		if (strpos($this->url, '{') !== false) {			
-			return str_replace(array_keys($this->tokens), array_values($this->tokens), $this->url);
-		}
-
-		return $this->url;
+		return $this->replaceTokens($this->url);
 	}
 
 	public function getLabel($data)
@@ -52,15 +48,19 @@ class Button implements ButtonInterface {
 			return $func($data);
 		}
 
-		if (strpos($this->label, '{') !== false) {			
-			return str_replace(array_keys($this->tokens), array_values($this->tokens), $this->label);
-		}
-
-		return $this->label;
+		return $this->replaceTokens($this->label);
 	}
 
 	public function __toString()
 	{
 		return $this->render();
+	}
+
+	public function replaceTokens($string)
+	{		
+		if (strpos($string, '{') !== false) {			
+			return str_replace(array_keys($this->tokens), array_values($this->tokens), $string);
+		}
+		return $string;
 	}
 }

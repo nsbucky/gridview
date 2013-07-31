@@ -9,8 +9,9 @@ class ButtonColumn extends Column {
 	public function getValue($index)
 	{
 		$s = '';		
+		$tokens = $this->getTokens();
 		foreach($this->buttons as $button) {			
-			$button->setTokens($this->getTokens());
+			$button->setTokens($tokens);
 			$s .= $button->render().' '.PHP_EOL;
 		}
 
