@@ -22,6 +22,10 @@ class Table implements \ArrayAccess {
 
 	public function __construct($dataSource, array $options=null)
 	{		
+		if(!count($dataSource)) {
+			throw new \RunTimeException("Datasource must not be an empty array");
+		}
+
 		$this->dataSource = $dataSource;
         
         if(count($options)) {
@@ -199,8 +203,24 @@ jQuery(function(){
         return ob_get_clean();
     }
 
+    /**
+     * if no columns have been added, try to come up with a table from just the columns
+     * in the result set.
+     */
+    public function buildDefaultColumns()
+    {
+    	if(count($this->columns) > 0) return;
+    	
+    	$dataSample = $this->dataSource[0];
+
+    	foreach((array) $dataSample as $key=>$value) {
+    		$this->addColumn(array('name'=>$key));
+    	}
+    }
+
 	public function render()
 	{
+		$this->buildDefaultColumns();
 		// add in auto button columns
 		if(count($this->buttons)) {
 			$this->addColumn(new Columns\ButtonColumn(array('buttons'=>$this->buttons)));

@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__.'/../GridView/Table.php';
+require __DIR__.'/../GridView/TableList.php';
 require __DIR__.'/../GridView/Columns/ColumnInterface.php';
 require __DIR__.'/../GridView/Buttons/ButtonInterface.php';
 require __DIR__.'/../GridView/Columns/Column.php';
@@ -615,5 +616,25 @@ class GridViewTest extends PHPUnit_Framework_TestCase {
         $output = $table->render();
         #echo $output;
         // will get to the html test soon 
+    }
+
+    public function testBuildDefaultColumns()
+    {
+        $table = new GridView\Table($this->dataSourceObject);
+        #echo $table; auto builds table from results.
+        // will get to this soon too
+        $table = new GridView\Table($this->dataSourceObject);
+        $table->addViewButton('view/{uniqid}')
+        ->addEditButton('edit/me')
+        ->addDeleteButton('delete/it');
+        #echo $table;
+
+    }
+
+    public function testListView()
+    {
+        print_r($this->dataSourceArray[0]);
+        $table = new GridView\TableList($this->dataSourceArray[0]);
+        #echo $table;
     }
 }

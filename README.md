@@ -37,6 +37,30 @@ In the `require` key of `composer.json` file add the following
 	}
 
 	$table = new GridView\Table($dataSource);
+	echo $table; // renders table based on results
+
+	$table = new GridView\Table($dataSource);
+	$table->addViewButton('view/{uniqid}')
+        ->addEditButton('edit/me')
+        ->addDeleteButton('delete/it');
+    echo $table; // will render table based on results with some buttons in last column
+
+    // in a list view
+    $table = new GridView\TableList($dataSource[0]);
+    echo $table; // will render a 2 column table with the column headers on left
+
+## Longer Example
+	$dataSource = array();
+	for($i=0; $i<10; $i++) {
+		$dataSource[] = array(
+		            	'uniqid'=>uniqid(), 
+		            	'loop_iterator'=>$i.' times',
+		            	'date'=>date('Y-m-d'),
+		            	'total'=>rand(1,25)
+		           	);		        
+	}
+
+	$table = new GridView\Table($dataSource);
 	$table->addColumn(
 		array('name'=>'uniqid') // defaults to GridView\Columns\Column
 	)
