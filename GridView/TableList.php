@@ -36,23 +36,14 @@ class TableList extends Table {
 
 	public function renderFooter() 
 	{	
-		$footers = array_filter($this->footers);	
-		if(empty($footers)) return;
-
+        
 		ob_start();
 ?>
-<tfoot>	
-	<?php foreach($this->footers as $f): ?>
+<tfoot>		
 	<tr>
 		<td></td>
-		<td><?php         
-		if($f['value'] && $f['format']):
-			$func = $f['format'];
-			if(is_callable($func)) echo $func($f['value']);
-		endif;		
-		?></td>
-	</tr>
-	<?php endforeach;?>	
+		<td></td>
+	</tr>	
 </tfoot>
 <?php
 		return ob_get_clean();
