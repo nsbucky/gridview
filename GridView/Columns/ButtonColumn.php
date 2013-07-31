@@ -3,6 +3,8 @@
 class ButtonColumn extends Column {
 	public $buttons = array();
 	public $name = 'Actions';
+	public $filter = false;
+	public $cellCss = 'grid-view-button-column';
 
 	public function getValue($data, $index)
 	{

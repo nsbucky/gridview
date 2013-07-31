@@ -2,8 +2,8 @@
 
 class Column implements ColumnInterface {
 	// none of these values are escaped.
-	public $header, $value, $name, $filter,
-	       $rowCss, $cellCss;
+	public $header, $value, $name, $filter, $rowCss;
+	public $cellCss = 'grid-view-column';
 	public $visible  = true;
 	public $sortable = false;
 	public $sortableName;

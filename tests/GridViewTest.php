@@ -609,9 +609,9 @@ class GridViewTest extends PHPUnit_Framework_TestCase {
     {
         $table = new GridView\Table($this->dataSourceArray);
         $table[] = array('name'=>'uniqid');
-        $table->addViewButton('view/id');
-        $table->addEditButton('edit/me');
-        $table->addDeleteButton('delete/it');
+        $table->addViewButton('view/id')
+        ->addEditButton('edit/me')
+        ->addDeleteButton('delete/it');
         $output = $table->render();
         #echo $output;
         // will get to the html test soon 

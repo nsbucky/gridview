@@ -5,6 +5,7 @@ namespace GridView\Columns;
 class CalcColumn extends Column
 {
 	public $calculation;
+	public $cellCss = 'grid-view-calc-column';
 
 	public function getValue($data, $index)
 	{

@@ -4,6 +4,7 @@ class TotalColumn extends Column
 {	
 	public $filter = false;
 	public $format;
+	public $cellCss = 'grid-view-total-column';
 
 	public function getValue($data, $index)
 	{

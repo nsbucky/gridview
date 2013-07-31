@@ -3,6 +3,7 @@
 class CheckBoxColumn extends Column
 {
 	public $checked = false;	
+	public $cellCss = 'grid-view-checkbox-column';
 
 	public function getFilter()
 	{
