@@ -3,7 +3,7 @@
 class LinkColumn extends Column
 {
 	public $url, $label;
-	public $linkCss = 'btn';
+	public $linkCss = '';
 	public $cellCss = 'grid-view-link-column';
 	
 	public function __construct(array $config)
