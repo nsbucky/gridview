@@ -35,8 +35,9 @@ class TableList extends Table {
 	}
 
 	public function renderFooter() 
-	{		
-		if(empty($this->footers)) return;
+	{	
+		$footers = array_filter($this->footers);	
+		if(empty($footers)) return;
 
 		ob_start();
 ?>
