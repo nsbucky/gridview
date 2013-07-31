@@ -295,15 +295,18 @@ endif;
 	public function addViewButton($url)
 	{
 		$this->buttons[] = new Buttons\ViewButton($url);
+		return $this;
 	}
 
 	public function addEditButton($url)
 	{
 		$this->buttons[] = new Buttons\EditButton($url);
+		return $this;
 	}
 
 	public function addDeleteButton($url)
 	{
 		$this->buttons[] = new Buttons\DeleteButton($url);
+		return $this;
 	}
 }
