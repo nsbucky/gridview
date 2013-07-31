@@ -5,9 +5,9 @@ class DateTimeColumn extends Column
 	public $format = 'Y-m-d H:i:s';	
 	public $cellCss = 'grid-view-datetime-column';
 
-	public function getValue($data, $index)
+	public function getValue($index)
 	{
-		$value = parent::getValue($data, $index);
+		$value = parent::getValue($index);
 		try {
 			$date = new \DateTime($value);
 			return $date->format($this->format);

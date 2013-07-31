@@ -6,9 +6,9 @@ class TotalColumn extends Column
 	public $format;
 	public $cellCss = 'grid-view-total-column';
 
-	public function getValue($data, $index)
+	public function getValue($index)
 	{
-		$value = parent::getValue($data, $index);
+		$value = parent::getValue($index);
 		$total = $this->table->getFooterValue($this->name);
 		$this->table->setFooterValue($this->name, $total + $value);
 		return $value;		

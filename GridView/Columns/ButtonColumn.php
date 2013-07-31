@@ -6,12 +6,11 @@ class ButtonColumn extends Column {
 	public $filter = false;
 	public $cellCss = 'grid-view-button-column';
 
-	public function getValue($data, $index)
+	public function getValue($index)
 	{
-		$s = '';
-		$tokens = $this->tokenize($data);
+		$s = '';		
 		foreach($this->buttons as $button) {			
-			$button->setTokens($tokens);
+			$button->setTokens($this->getTokens());
 			$s .= $button->render().' '.PHP_EOL;
 		}
 

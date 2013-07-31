@@ -15,39 +15,29 @@ class LinkColumn extends Column
 		parent::__construct($config);
 	}
 
-	public function getValue($data, $index)
+	public function getValue($index)
 	{
-		return sprintf('<a href="%s" class="%s">%s</a>', $this->getUrl($data), $this->linkCss, $this->getLabel($data));	
+		return sprintf('<a href="%s" class="%s">%s</a>', $this->getUrl(), $this->linkCss, $this->getLabel());	
 	}
 
-	public function getUrl($data)
+	public function getUrl()
 	{
 		if(is_callable($this->url)) {
 			$func = $this->url;
-			return $func($data);
+			return $func($this->data);
 		}
 
-		if (strpos($this->url, '{') !== false) {
-			$tokens = $this->tokenize($data);
-			return str_replace(array_keys($tokens), array_values($tokens), $this->url);
-		}
-
-		return $this->url;
+		return $this->replaceTokens($this->url);
 	}
 
-	public function getLabel($data)
+	public function getLabel()
 	{
 		if(is_callable($this->label)) {
 			$func = $this->label;
-			return $func($data);
+			return $func($this->data);
 		}
 
-		if (strpos($this->label, '{') !== false) {
-			$tokens = $this->tokenize();
-			return str_replace(array_keys($tokens), array_values($tokens), $this->label);
-		}
-
-		return $this->label;
+		return $this->replaceTokens($this->label);		
 	}
 
 	public function getHeader()

@@ -10,10 +10,10 @@ class CheckBoxColumn extends Column
 		return '<input type="checkbox" name="select-all" class="grid-view-select-all">';
 	}
 
-	public function getValue($data, $index)
+	public function getValue($index)
 	{
-		$value = parent::getValue($data, $index);
-		$checked = $this->isChecked($data) ? 'checked="checked"' : null;
+		$value = parent::getValue($index);
+		$checked = $this->isChecked($this->data) ? 'checked="checked"' : null;
 		return sprintf('<input type="checkbox" name="%s[]" class="grid-view-checkbox" value="%s" %s>', 
 			           $this->name,
 			           $value,
@@ -35,12 +35,14 @@ class CheckBoxColumn extends Column
 		ob_start()
 		?>
 		<script>
-		$('.grid-view-select-all').click(function(){
-			if($(this).checked) {
-				$('.grid-view-checkbox').attr('checked', true);
-			} else {
-				$('.grid-view-checkbox').attr('checked', false);
-			}
+		jQuery(function(){
+			$('.grid-view-select-all').click(function(){
+				if($(this).checked) {
+					$('.grid-view-checkbox').attr('checked', true);
+				} else {
+					$('.grid-view-checkbox').attr('checked', false);
+				}
+			});
 		});
 		</script>
 		<?php

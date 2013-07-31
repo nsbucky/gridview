@@ -7,13 +7,13 @@ class CalcColumn extends Column
 	public $calculation;
 	public $cellCss = 'grid-view-calc-column';
 
-	public function getValue($data, $index)
+	public function getValue($index)
 	{
 		if (!is_callable($this->calculation)) {
 			return 0;
 		}
 
 		$func = $this->calculation;
-		return $func($data);
+		return $func($this->data);
 	}
 }

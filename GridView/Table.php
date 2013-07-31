@@ -188,9 +188,11 @@ class Table implements \ArrayAccess {
 </div>
 
 <?php ob_start();?>
-$("grid-view-<?php echo $this->itemsPerPageIdentifier?>").change(function(){
-        var values = $('#<?php echo $this->id;?> .grid-view-filters :input').serialize();
-		window.location = window.pathname+'?'+values+"&<?php echo $this->itemsPerPageIdentifier?>="+$(this).val();
+jQuery(function(){
+	$("#grid-view-<?php echo $this->itemsPerPageIdentifier?>").change(function(){
+	        var values = $('#<?php echo $this->id;?> .grid-view-filters :input').serialize();
+			window.location = window.pathname+'?'+values+"&<?php echo $this->itemsPerPageIdentifier?>="+$(this).val();
+	});
 });
 <?php $this->javascript .= ob_get_clean();?>
 <?php
@@ -213,13 +215,13 @@ $("grid-view-<?php echo $this->itemsPerPageIdentifier?>").change(function(){
 <?php 
 if(count($this->dataSource)):
 	$index = 0;
-	foreach($this->dataSource as $data):
+	foreach($this->dataSource as $index=>$data):
 	?>
 	<tr class="<?php echo $this->getTableRowCss($data, $index);?>">
 	<?php
 		foreach($this->columns as $column):
 	?>	
-		<td class="<?php echo $column->cellCss;?>"><?php echo $column->getValue($data, $index);?></td> 
+		<td class="<?php echo $column->cellCss;?>"><?php echo $column->setData($data)->getValue($index);?></td> 
 <?php
 		endforeach;
 	?>
@@ -267,11 +269,13 @@ endif;
 		ob_start();
 		?>
 <script>
+jQuery(function(){
 	$('#<?php echo $this->id;?> .grid-view-filters :input').blur(function(){
 		// serialize the inputs and submit a form
 		var values = $('#<?php echo $this->id;?> .grid-view-filters :input').serialize();
 		window.location = window.pathname+'?'+values;
 	});
+});
 </script>		
 		<?php		
 		$this->javascript .= ob_get_clean();

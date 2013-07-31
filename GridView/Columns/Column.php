@@ -10,6 +10,7 @@ class Column implements ColumnInterface {
 	public $javascript;
 	protected $tokens = array();
 	protected $table;
+	protected $data = array();
 
 	public function __construct(array $config)
 	{		
@@ -33,6 +34,12 @@ class Column implements ColumnInterface {
 		return $this;
 	}
 
+	public function setData($data)
+	{
+		$this->data = $data;		
+		return $this;
+	}
+
 	public function getFilter()
 	{
 		if (!isset($this->filter)) {
@@ -52,7 +59,7 @@ class Column implements ColumnInterface {
 		return $this->header;
 	}
 
-	public function getValue($data, $index)
+	public function getValue($index)
 	{				
 		if(!isset($this->name) && !isset($this->value)) {
 			throw new \Exception('You must set a name or value for a column to render.');
@@ -61,18 +68,18 @@ class Column implements ColumnInterface {
 		if(isset($this->value)) {
 			if(is_callable($this->value)) {
 				$func = $this->value;
-				return $func($data, $index);
+				return $func($this->data, $index);
 			}
 
 			return $this->value;
 		}
 
-		if(is_array($data)) {
-			return htmlspecialchars($data[$this->name], ENT_QUOTES);
+		if(is_array($this->data)) {
+			return htmlspecialchars($this->data[$this->name], ENT_QUOTES);
 		}
 
-		if(is_object($data)) {
-			return htmlspecialchars($data->{$this->name}, ENT_QUOTES);
+		if(is_object($this->data)) {
+			return htmlspecialchars($this->data->{$this->name}, ENT_QUOTES);
 		}
 	}
 
@@ -82,9 +89,7 @@ class Column implements ColumnInterface {
 	}
 
 	public function tokenize($data)
-	{
-		if(count($this->tokens)) return $this->tokens;
-
+	{		
 		if(is_object($data) && method_exists($data, 'toArray')) {
             $data = $data->toArray();
         }
@@ -96,6 +101,12 @@ class Column implements ColumnInterface {
 		return $this->tokens;
 	}
 
+	public function getTokens()
+	{
+		if(count($this->tokens)) return $this->tokens;
+		return $this->tokenize($this->data);		
+	}
+
 	public function getJavaScript()
 	{
 		return $this->javascript;
@@ -104,5 +115,14 @@ class Column implements ColumnInterface {
 	public function getFooter()
 	{
 		return array('value'=>null,'format'=>null);
+	}
+
+	public function replaceTokens($string)
+	{
+		$tokens = $this->getTokens();
+		if (strpos($string, '{') !== false) {			
+			return str_replace(array_keys($tokens), array_values($tokens), $string);
+		}
+		return $string;
 	}
 }
