@@ -1,6 +1,6 @@
 <?php namespace GridView;
 
-class TableList extends Table implements \ArrayAccess {
+class TableList extends Table {
 	public $id            = 'GridViewList';
 	public $dataSource    = array();
 	protected $columns    = array();
