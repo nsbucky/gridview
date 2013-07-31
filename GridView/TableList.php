@@ -4,7 +4,7 @@ class TableList extends Table {
 	public $id            = 'GridViewList';
 	public $dataSource    = array();
 	protected $columns    = array();
-	public $tableCss      = 'table table-bordered table-striped';	
+	public $tableCss      = 'table table-striped';	
 	public $tableRowCss   = null;		
 	protected $headers    = array();	
 	public $noResultsText = '<p><span class="text-warning">No results.</span></p>';
@@ -90,17 +90,16 @@ class TableList extends Table {
 <?php 
 if(!empty($this->dataSource)):		
 	?>
-	<tr>
+	
 	<?php
 		foreach($this->columns as $column):
 	?>	
+	<tr>
 		<th><?php echo $column->getHeader();?></th>
 		<td class="<?php echo $column->cellCss;?>"><?php echo $column->setData($this->dataSource)->getValue(0);?></td> 
+	</tr>
 <?php
 		endforeach;
-	?>
-	</tr>
-	<?php		
 else:
 ?>
 	<tr>
