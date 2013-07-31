@@ -209,7 +209,7 @@ jQuery(function(){
         
         if($this->showItemsPerPageHeader) echo $this->renderItemsPerPage();
 ?>
-<table class="<?php echo $this->tableCss;?>">
+<table class="<?php echo $this->tableCss;?>" id="<?php echo $this->id;?>">
 	<?php echo $this->renderHeader();?>	
 	<tbody>
 <?php 
