@@ -18,6 +18,7 @@ class Table implements \ArrayAccess {
 	public $itemsPerPage  = array(10, 20, 50, 100);
     public $itemsPerPageIdentifier = 'limit';
 	public $showItemsPerPageHeader = false;
+	protected $buttons = array();
 
 	public function __construct($dataSource, array $options=null)
 	{		
@@ -198,6 +199,10 @@ $("grid-view-<?php echo $this->itemsPerPageIdentifier?>").change(function(){
 
 	public function render()
 	{
+		// add in auto button columns
+		if(count($this->buttons)) {
+			$this->addColumn(new Columns\ButtonColumn(array('buttons'=>$this->buttons)));
+		}
 		ob_start();
         
         if($this->showItemsPerPageHeader) echo $this->renderItemsPerPage();
@@ -285,5 +290,20 @@ endif;
 		if(array_key_exists($name, $this->footers)) {
 			$this->footers[$name]['value'] = $value;
 		}
+	}
+
+	public function addViewButton($url)
+	{
+		$this->buttons[] = new Buttons\ViewButton($url);
+	}
+
+	public function addEditButton($url)
+	{
+		$this->buttons[] = new Buttons\EditButton($url);
+	}
+
+	public function addDeleteButton($url)
+	{
+		$this->buttons[] = new Buttons\DeleteButton($url);
 	}
 }
