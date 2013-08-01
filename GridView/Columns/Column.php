@@ -155,7 +155,7 @@ class Column implements ColumnInterface {
 		$value = null;
 		
 		if(isset($_GET[$this->name])) {
-			$value = htmlentities($this->name, ENT_QUOTES);
+        $value = htmlentities($_GET[$this->name], ENT_QUOTES);
 		}
 
 		if (!isset($this->filter)) {
