@@ -146,11 +146,11 @@ class Table implements \ArrayAccess {
      * 
      * @param type $dataSource
      * @param array $options
-     * @throws \RunTimeException
+     * @throws \RunTimeException on $emptyDataSource
      */
 	public function __construct($dataSource, array $options=null)
 	{		
-		if(!count($dataSource)) {
+		if( empty($dataSource) ) {
 			throw new \RunTimeException("Datasource must not be an empty array");
 		}
 
@@ -168,18 +168,18 @@ class Table implements \ArrayAccess {
      * @param array $options
      */
     protected function setConfigOptions(array $options)
-    {
+    {        
         $allowed = array(
             'tableCss','tableRowCss','sortUrl','itemsPerPage', 
             'itemsPerPageIdentifier', 'sortDirection','noResultsText',
-            'javascript','useJqueryJavascripts', 'showItemsPerPageHeader');
+            'javascript','useJqueryJavascripts', 'showItemsPerPageHeader'
+        );
         
-        $optionsToSet = array_intersect_key($allowed, $options);
+        $optionsToSet = array_intersect( $allowed, array_keys($options) );
         
-        foreach($optionsToSet as $key => $value) {
-            $this->$key = $value;
-        }
-        
+        foreach($optionsToSet as $key) {
+            $this->$key = $options[$key];
+        }        
     }
 
     /**
@@ -451,6 +451,7 @@ jQuery(function(){
      * build the whole table based on the $dataSource. It will first try to build
      * any default columns based on first. Also if the $buttons array is not empty
      * it will add a GridView\Columns\ButtonColumn column to the end of the $columns array 
+     * 
      * @return string
      */
 	public function render()
@@ -485,6 +486,11 @@ jQuery(function(){
 		return ob_get_clean();
 	}
     
+    /**
+     * render the tbody section
+     * 
+     * @return string
+     */
     public function renderTableBody()
     {
         // if data source is empty show the $noResults text
@@ -498,11 +504,20 @@ jQuery(function(){
             return ob_get_clean();
         }
         
+        $rows = '';
         foreach($this->dataSource as $index=>$data) {
-            $this->renderTableRow($data, $index);
+            $rows .= $this->renderTableRow($data, $index);
         }
+        return $rows;
     }
     
+    /**
+     * REnder a table row
+     * 
+     * @param type $data
+     * @param type $index
+     * @return string
+     */
     public function renderTableRow($data, $index)
     {
         ob_start();
@@ -510,7 +525,7 @@ jQuery(function(){
         <tr class="<?php echo $this->getTableRowCss($data, $index);?>">
         <?php foreach($this->columns as $column) { ?>	
             <td class="<?php echo $column->cellCss;?>">
-                <?php echo $column->setData($data)->getValue($index);?>
+                <?php echo $column->setData($data)->getValue($index);?> 
             </td> 
         <?php } ?>
         </tr>

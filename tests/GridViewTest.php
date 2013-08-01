@@ -32,6 +32,18 @@ class GridViewTest extends PHPUnit_Framework_TestCase {
 		}
 		return parent::__construct();
 	}
+         
+    public function testSetConfigOptions()
+    {
+        $dataSource = array(
+            array('uniqid'=>'123', 'loop_iterator'=>'4 times','date'=>date('Y-m-d'),'total'=>rand(1,25))
+        );
+        
+        $options = array('sortDirection'=>'DESC');
+        $table = new GridView\Table($dataSource, $options);
+        
+        $this->assertEquals('DESC', $table->sortDirection);        
+    }
 
 	public function testCreateTable()
 	{
@@ -66,10 +78,11 @@ class GridViewTest extends PHPUnit_Framework_TestCase {
             'sortable'=>true
         )) );
         $string = $table->render();    
-        #echo $string;
+        
         $this->assertTag(
             array(
-                'tag'=>'table',                       
+                'tag'=>'table', 
+                'id'=>'GridViewTable',
 				'attributes'=>array(
 					'class'=>'table table-bordered table-striped',					
                 ),
@@ -392,18 +405,7 @@ class GridViewTest extends PHPUnit_Framework_TestCase {
             $string
         );
     }
-    
-    public function testSetConfigOptions()
-    {
-        $dataSource = array(
-            array('uniqid'=>'123', 'loop_iterator'=>'4 times','date'=>date('Y-m-d'),'total'=>rand(1,25))
-        );
-        
-        $options = array('sortDirection'=>'DESC');
-        $table = new GridView\Table($dataSource, $options);
-        
-        $this->assertEquals('DESC', $table->sortDirection);
-    }
+   
     
     public function testSetSortDirectionFromUrl()
     {
@@ -604,37 +606,246 @@ class GridViewTest extends PHPUnit_Framework_TestCase {
         $output = $table->render();
         // will finish in a bit. sorry about that.
         #echo $output;
+        $this->assertTag(array(
+            'tag'=>'td',
+            'attributes'=>array(
+                'class'=>'grid-view-button-column',                
+            ),
+            'descendant'=>array(
+                'tag'=>'a',
+                'attributes'=>array(
+                    'class'=>'btn btn-info btn-small',
+                    'href'=>'/view'
+                ),
+                'content'=>'View'
+            )
+        ),
+            $output);
+        
+        $this->assertTag(array(
+            'tag'=>'td',
+            'attributes'=>array(
+                'class'=>'grid-view-button-column',                
+            ),
+            'descendant'=>array(
+                'tag'=>'a',
+                'attributes'=>array(
+                    'class'=>'btn btn-success btn-small',
+                    'href'=>'/edit'
+                ),
+                'content'=>'Edit'
+            )
+           ),
+            $output
+        );
+        
+        $this->assertTag(array(
+            'tag'=>'td',
+            'attributes'=>array(
+                'class'=>'grid-view-button-column'
+            ),
+            'descendant'=>array(
+                'tag'=>'form',
+                'attributes'=>array(
+                    'action'=>'/delete',
+                    'method'=>'post',
+                    'class'=>'form-inline'
+                ),                
+                
+                'descendant'=>array(
+                    'tag'=>'input',
+                    'attributes'=>array(
+                        'name'=>'grid-view-submit',
+                        'value'=>'Delete',
+                        'class'=>'btn btn-danger btn-small',
+                        'onclick'=>"return confirm('Are you sure you want to do this?')"
+                    ),
+                )
+            )
+            
+        ), $output);
     }
 
     public function testEasyAddButtons()
     {
         $table = new GridView\Table($this->dataSourceArray);
         $table[] = array('name'=>'uniqid');
-        $table->addViewButton('view/id')
-        ->addEditButton('edit/me')
-        ->addDeleteButton('delete/it');
+        $table->addViewButton('/view/id')
+        ->addEditButton('/edit/me')
+        ->addDeleteButton('/delete/it');
         $output = $table->render();
         #echo $output;
-        // will get to the html test soon 
+        // will get to the html test soon
+        $this->assertTag(array(
+            'tag'=>'td',
+            'attributes'=>array(
+                'class'=>'grid-view-button-column',                
+            ),
+            
+            'descendant'=>array(
+                'tag'=>'a',
+                'attributes'=>array(
+                    'class'=>'btn btn-info btn-small',
+                    'href'=>'/view/id'
+                ),
+                'content'=>'View'
+            )
+        ),
+        $output);
+                
+        $this->assertTag(array(
+            'tag'=>'td',
+            'attributes'=>array(
+                'class'=>'grid-view-button-column',                
+            ),
+            'descendant'=>array(
+                'tag'=>'a',
+                'attributes'=>array(
+                    'class'=>'btn btn-success btn-small',
+                    'href'=>'/edit/me'
+                ),
+                'content'=>'Edit'
+            )
+           ),
+            $output
+        );
+        
+        $this->assertTag(array(
+            'tag'=>'td',
+            'attributes'=>array(
+                'class'=>'grid-view-button-column'
+            ),
+            'descendant'=>array(
+                'tag'=>'form',
+                'attributes'=>array(
+                    'action'=>'/delete/it',
+                    'method'=>'post',
+                    'class'=>'form-inline'
+                ),                
+                
+                'descendant'=>array(
+                    'tag'=>'input',
+                    'attributes'=>array(
+                        'name'=>'grid-view-submit',
+                        'value'=>'Delete',
+                        'class'=>'btn btn-danger btn-small',
+                        'onclick'=>"return confirm('Are you sure you want to do this?')"
+                    ),
+                )
+            )
+            
+        ), $output);
     }
 
     public function testBuildDefaultColumns()
-    {
-        $table = new GridView\Table($this->dataSourceObject);
-        #echo $table; auto builds table from results.
-        // will get to this soon too
-        $table = new GridView\Table($this->dataSourceObject);
-        $table->addViewButton('view/{uniqid}')
-        ->addEditButton('edit/me')
-        ->addDeleteButton('delete/it');
-        #echo $table;
-
+    {        
+        $table = new GridView\Table($this->dataSourceArray);
+        $table->addViewButton('/view/id')
+        ->addEditButton('/edit/me')
+        ->addDeleteButton('/delete/it');
+        
+        $output = $table->render();
+        #echo $output;
+        #echo 'count is: '. count($this->dataSourceArray[0]);
+        $this->assertTag(array(
+            'tag'=>'tr',
+            'children'=>array(                
+                'count'=>(count($this->dataSourceArray[0]) + 1)
+            )
+        ), $output);
+                
+        $this->assertTag(array(
+            'tag'=>'td',
+            'attributes'=>array(
+                'class'=>'grid-view-button-column',                
+            ),
+            
+            'descendant'=>array(
+                'tag'=>'a',
+                'attributes'=>array(
+                    'class'=>'btn btn-info btn-small',
+                    'href'=>'/view/id'
+                ),
+                'content'=>'View'
+            )
+        ),
+        $output);
+                
+        $this->assertTag(array(
+            'tag'=>'td',
+            'attributes'=>array(
+                'class'=>'grid-view-button-column',                
+            ),
+            'descendant'=>array(
+                'tag'=>'a',
+                'attributes'=>array(
+                    'class'=>'btn btn-success btn-small',
+                    'href'=>'/edit/me'
+                ),
+                'content'=>'Edit'
+            )
+           ),
+            $output
+        );
+        
+        $this->assertTag(array(
+            'tag'=>'td',
+            'attributes'=>array(
+                'class'=>'grid-view-button-column'
+            ),
+            'descendant'=>array(
+                'tag'=>'form',
+                'attributes'=>array(
+                    'action'=>'/delete/it',
+                    'method'=>'post',
+                    'class'=>'form-inline'
+                ),                
+                
+                'descendant'=>array(
+                    'tag'=>'input',
+                    'attributes'=>array(
+                        'name'=>'grid-view-submit',
+                        'value'=>'Delete',
+                        'class'=>'btn btn-danger btn-small',
+                        'onclick'=>"return confirm('Are you sure you want to do this?')"
+                    ),
+                )
+            )
+            
+        ), $output);
     }
 
     public function testListView()
     {
-        print_r($this->dataSourceArray[0]);
+        #print_r($this->dataSourceArray[0]);
         $table = new GridView\TableList($this->dataSourceArray[0]);
-        #echo $table;
+        $output = $table->render();
+        
+        $this->assertTag(array(
+            'tag'=>'thead',
+            'descendant'=>array(
+                'tag'=>'tr',
+                'children'=>array(
+                    'count'=>2
+                )
+            )
+        ), $output);
+        
+        $this->assertTag(array(
+            'tag'=>'tbody',
+            'children'=>array(
+                'count'=>count($this->dataSourceArray[0])
+            ),
+            'descendant'=>array(
+                'tag'=>'tr',
+                'descendant'=>array(
+                    'tag'=>'td'
+                ),
+                'children'=>array(
+                    'count'=>2
+                )
+            )
+        ), $output);
+        
     }
 }

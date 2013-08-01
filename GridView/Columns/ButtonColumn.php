@@ -1,5 +1,10 @@
 <?php namespace GridView\Columns;
 
+/**
+ * this class will create 1 table cell that is filled with the \Buttons\Button 
+ * that you pass to it.
+ * 
+ */
 class ButtonColumn extends Column {
 	public $buttons = array();
 	public $name = 'Actions';

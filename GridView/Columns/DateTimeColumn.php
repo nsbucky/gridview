@@ -1,7 +1,12 @@
 <?php namespace GridView\Columns;
 
-class DateTimeColumn extends Column
-{
+/**
+ * this class can be used to display a string of date/time in a column
+ * php's \DateTime class will be used to interpret the columns value and
+ * create a \DateTime object. Output format can be set.
+ * 
+ */
+class DateTimeColumn extends Column {
 	public $format = 'Y-m-d H:i:s';	
 	public $cellCss = 'grid-view-datetime-column';
 

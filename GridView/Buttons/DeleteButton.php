@@ -1,5 +1,10 @@
 <?php namespace GridView\Buttons;
 
+/**
+ * create a button inside of a form that will do a post request to the given
+ * url. By default a javascript confirm dialog will be created
+ * 
+ */
 class DeleteButton extends Button {
 	public $label = 'Delete';
 	public $confirm = true;

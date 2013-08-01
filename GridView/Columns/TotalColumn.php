@@ -1,7 +1,10 @@
 <?php namespace GridView\Columns;
 
-class TotalColumn extends Column
-{	
+/**
+ * this class is used to sum up amounts in this column, then put a total in the
+ * table footer
+ */
+class TotalColumn extends Column {	
 	public $filter = false;
 	public $format;
 	public $cellCss = 'grid-view-total-column';
@@ -16,7 +19,9 @@ class TotalColumn extends Column
 
 	public function getFooter()
 	{
-        if(!is_callable($this->format)) {
+        // if format is not a callable function, then lets make one that just 
+        // returns the total as a number
+        if( !is_callable($this->format) ) {
             $this->format = function($v) {
                 return sprintf('%d', $v);
             };
