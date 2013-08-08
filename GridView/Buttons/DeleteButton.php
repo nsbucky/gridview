@@ -8,7 +8,7 @@
 class DeleteButton extends Button {
 	public $label = 'Delete';
 	public $confirm = true;
-	public $css = 'btn btn-danger btn-small';
+	public $css = 'btn btn-danger btn-small';	
 
 	public function __construct($url, $config=array())
 	{
@@ -25,7 +25,10 @@ class DeleteButton extends Button {
 			$onclick = 'onclick="return confirm(\'Are you sure you want to do this?\')"';
 		}		
 		return sprintf(
-				'<form action="%s" method="post" class="form-inline"><input type="submit" name="grid-view-submit" value="%s" class="%s" %s></form>', 
+				'<form action="%s" method="post" class="form-inline">
+				<input type="submit" name="grid-view-submit" value="%s" class="%s" %s>
+				<input type="hidden" name="_method" value="delete">
+				</form>', 
 				$url, 
 				$label,
 				$this->css, 
