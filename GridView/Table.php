@@ -142,6 +142,13 @@ class Table implements \ArrayAccess {
 	protected $buttons = array();
 
     /**
+     * if set to true, the filters row in the header will be turned off.
+     * 
+     * @var boolean
+     */
+    public $noFilters = false;
+
+    /**
      * Constructor
      * 
      * @param type $dataSource
@@ -170,7 +177,7 @@ class Table implements \ArrayAccess {
     protected function setConfigOptions(array $options)
     {        
         $allowed = array(
-            'tableCss','tableRowCss','sortUrl','itemsPerPage', 
+            'tableCss','tableRowCss','sortUrl','itemsPerPage', 'noFilters',
             'itemsPerPageIdentifier', 'sortDirection','noResultsText',
             'javascript','useJqueryJavascripts', 'showItemsPerPageHeader'
         );
@@ -348,6 +355,7 @@ class Table implements \ArrayAccess {
 	<tr class="grid-view-headers">
 		<th><?php echo implode("\n</th>\n<th>\n", $headers);?></th>
 	</tr>
+    <?php if($this->noFilters) return ob_get_clean();?>
 	<tr class="grid-view-filters">
 		<th><?php echo implode("\n</th>\n<th>\n", $filters);?></th>
 	</tr>
