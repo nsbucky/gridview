@@ -27,7 +27,7 @@ class DeleteButton extends Button {
 		return sprintf(
 				'<form action="%s" method="post" class="form-inline">
 				<input type="submit" name="grid-view-submit" value="%s" class="%s" %s>
-				<input type="hidden" name="_method" value="delete">
+				<input type="hidden" name="_method" value="DELETE">
 				</form>', 
 				$url, 
 				$label,
