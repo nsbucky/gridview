@@ -150,26 +150,86 @@ class Column implements ColumnInterface {
      * 
      * @return string
      */
-	public function getFilter()
-	{
-		$value = null;
-		
-		if(isset($_GET[$this->name])) {
-        $value = htmlentities($_GET[$this->name], ENT_QUOTES);
-		}
+    public function getFilter()
+    {
+        $value = null;
+        
+        if(isset($_GET[$this->name])) {
+            $value = htmlentities($_GET[$this->name], ENT_QUOTES);            
+        }
+        
+        if( isset($this->filter) && is_array($this->filter) ) {
+            return sprintf(
+                '<select name="%s" class="form-control">%s</select>',
+                $this->name,
+                $this->buildDropDownList($this->filter, $value)
+            );
+        }
 
-		if (!isset($this->filter)) {
-			return sprintf(
-				'<div class="grid-view-filter-container">
-				<input type="text" name="%s" style="width:100%%" class="grid-view-filter input-small form-control" value="%s">
-				</div>',
-				$this->name,
-				$value
-			);
-		}
+        if (!isset($this->filter)) {
+            return sprintf(
+                '<div class="grid-view-filter-container">
+                <input type="text" name="%s" style="width:100%%" class="grid-view-filter input-small form-control" value="%s">
+                </div>',
+                $this->name,
+                $value
+            );
+        }
 
-		return $this->filter;
-	}
+        return $this->filter;
+    }
+    
+    /**
+     * build a drop down list (select) from an array
+     * 
+     * @param array $options
+     * @param string $selectedValue
+     * @return string
+     */
+    protected function buildDropDownList(array $options, $selectedValue = null)
+    {
+        $optionsHtml = '';
+        foreach($options as $key=>$value) {
+            if(  is_array( $value ) ) {
+                $optionsHtml .= sprintf(
+                    '<optgroup label="%s">%s</optgroup>', 
+                    $key,
+                    $this->listOptions( $value, $selectedValue )
+                );                
+                continue;
+            }
+            $optionsHtml .= $this->listOptions(array($key=>$value), $selectedValue);            
+        }
+        
+        return $optionsHtml;
+    }
+    
+    /**
+     * create options tags from array
+     * 
+     * @param array $options
+     * @param string $selectedValue
+     * @return string
+     */
+    protected function listOptions(array $options, $selectedValue = null)
+    {
+        $optionsHtml = '';
+        
+        foreach($options as $key=>$value) {            
+            $selected = null;
+            if($selectedValue == $key) {
+                $selected = 'selected="selected"';
+            }
+            $optionsHtml .= sprintf(
+                '<option value="%s" %s>%s</option>', 
+                htmlspecialchars($key, ENT_QUOTES), 
+                $selected, 
+                htmlspecialchars($value, ENT_QUOTES)
+            );            
+        }
+        
+        return $optionsHtml;
+    }
 
     /**
      * Get the header string for this column. If no header is specifically set
@@ -209,11 +269,11 @@ class Column implements ColumnInterface {
 		}
 
 		if( is_array($this->data) ) {
-			return htmlspecialchars($this->data[$this->name], ENT_QUOTES);
+			return htmlspecialchars( (string) $this->data[$this->name], ENT_QUOTES);
 		}
 
 		if( is_object($this->data) ) {
-			return htmlspecialchars($this->data->{$this->name}, ENT_QUOTES);
+			return htmlspecialchars( (string) $this->data->{$this->name}, ENT_QUOTES);
 		}
 	}
 
