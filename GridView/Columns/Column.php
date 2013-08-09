@@ -269,10 +269,20 @@ class Column implements ColumnInterface {
 		}
 
 		if( is_array($this->data) ) {
+            
+            if( is_array($this->data[$this->name]) ) {
+                return 'Array()';
+            }
+            
 			return htmlspecialchars( (string) $this->data[$this->name], ENT_QUOTES);
 		}
 
 		if( is_object($this->data) ) {
+            
+            if( is_array($this->data{$this->name}) ) {
+                return 'Array()';
+            }
+            
 			return htmlspecialchars( (string) $this->data->{$this->name}, ENT_QUOTES);
 		}
 	}
@@ -303,6 +313,7 @@ class Column implements ColumnInterface {
         }
 
 		foreach((array) $data as $key=>$value) {
+            if( is_array($value) ) continue;
 			$this->tokens['{'.$key.'}'] = (string) $value;
 		}
 
