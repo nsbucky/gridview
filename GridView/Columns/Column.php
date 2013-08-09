@@ -303,7 +303,7 @@ class Column implements ColumnInterface {
         }
 
 		foreach((array) $data as $key=>$value) {
-			$this->tokens['{'.$key.'}'] = $value;
+			$this->tokens['{'.$key.'}'] = (string) $value;
 		}
 
 		return $this->tokens;
@@ -349,7 +349,7 @@ class Column implements ColumnInterface {
 	{
 		$tokens = $this->getTokens();
 		if (strpos($string, '{') !== false) {			
-			return str_replace(array_keys($tokens), array_values($tokens), $string);
+			return str_replace(array_keys($tokens), array_values($tokens), (string) $string);
 		}
 		return $string;
 	}
