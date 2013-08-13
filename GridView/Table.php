@@ -170,6 +170,28 @@ class Table implements \ArrayAccess {
 	}
     
     /**
+     * magic method for adding button types like addCalcColumn()
+     * 
+     * @param type $name
+     * @param type $arguments
+     */
+    public function __call( $name, $arguments )
+    {
+        $add = substr($name, 0, 3);
+        if( $add == 'add' ) {
+            
+            $class = substr($name, 3);
+            
+            $class = "\\GridView\\Columns\\".$class;
+            
+            return $this->addColumn( new $class($arguments[0]) );
+            
+        }
+        
+        throw new \BadFunctionCallException('No method named '.$name.' exists');
+    }
+    
+    /**
      * set public variables from an array passed as configuration array
      * 
      * @param array $options

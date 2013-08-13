@@ -279,7 +279,7 @@ class Column implements ColumnInterface {
 
 		if( is_object($this->data) ) {
             
-            if( is_array($this->data{$this->name}) ) {
+            if( is_array($this->data->{$this->name}) ) {
                 return 'Array()';
             }
             

@@ -66,6 +66,36 @@ class GridViewTest extends PHPUnit_Framework_TestCase {
         );
 	}
     
+    public function testMagicMethod()
+    {
+        $i = 0;
+        $u = uniqid();
+        $dataSource = array(
+            array('uniqid'=>$u, 'loop_iterator'=>$i.' times','date'=>date('Y-m-d'),'total'=>rand(1,25))
+        );
+        $table = new GridView\Table($dataSource);
+        $table->addColumn(new GridView\Columns\Column(array(
+            'name'=>'uniqid',
+            'sortable'=>true
+        )) );
+        $table->addLinkColumn(array('name'=>'balls', 'url'=>'nuts/{uniqid}', 'label'=>'my link'));
+        $string = $table->render();                
+        
+        $this->assertTag(
+            array(
+                'tag'=>'td',
+                'child'=>array(
+                    'tag'=>'a',
+                    'attributes'=>array(
+                        'href'=>'nuts/'.$u,
+                    ),
+                    'content'=>'my link'
+                )
+            ),            
+            $string
+        );
+    }
+    
     public function testAddColumn()
 	{       
         $i = 5;
