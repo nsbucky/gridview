@@ -22,10 +22,12 @@ class BooleanColumn extends Column {
         $labelCss  = 'label-default';
         
         if( in_array(strtolower( (string) $value ), $this->trueValues, true) ) {
+            $value = $this->trueLabel;
             $labelCss = 'label-success';
         }
         
         if( in_array(strtolower( (string) $value ), $this->falseValues, true) ) {
+            $value = $this->falseLabel;
             $labelCss = 'label-danger';
         }
         

@@ -184,7 +184,13 @@ class Table implements \ArrayAccess {
             
             $class = "\\GridView\\Columns\\".$class;
             
-            return $this->addColumn( new $class($arguments[0]) );
+            // if arg is just a string, create an array.
+            $arg = $arguments[0];
+            if( is_scalar($arg) ) {
+                $arg = array('name'=>$arg);
+            }
+            
+            return $this->addColumn( new $class($arg) );
             
         }
         
