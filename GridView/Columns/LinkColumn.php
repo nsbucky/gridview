@@ -77,7 +77,7 @@ class LinkColumn extends Column {
 			return $this->header;
 		}
 
-		return null;
+		return parent::getHeader();
 	}
 
     /**
