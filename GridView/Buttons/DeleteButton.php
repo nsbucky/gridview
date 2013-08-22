@@ -8,7 +8,7 @@
 class DeleteButton extends Button {
 	public $label = 'Delete';
 	public $confirm = true;
-	public $css = 'btn btn-danger btn-small';	
+	public $css = 'btn btn-danger btn-xs';	
 
 	public function __construct($url, $config=array())
 	{

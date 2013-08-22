@@ -5,7 +5,7 @@
  */
 class ViewButton extends Button {
 	public $label = 'View';
-	public $css = 'btn btn-info btn-small';
+	public $css = 'btn btn-info btn-xs';
 
 	public function __construct($url, $config=array())
 	{
