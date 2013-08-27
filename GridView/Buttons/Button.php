@@ -7,7 +7,7 @@ class Button implements ButtonInterface {
      * 
      * @var string
      */
-	public $css = 'btn btn-small';
+	public $css = 'btn btn-xs';
     
     /**
      * url to be used for link
