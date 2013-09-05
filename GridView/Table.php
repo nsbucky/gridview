@@ -157,9 +157,6 @@ class Table implements \ArrayAccess {
      */
 	public function __construct($dataSource, array $options=null)
 	{		
-		if( empty($dataSource) ) {
-			throw new \RunTimeException("Datasource must not be an empty array");
-		}
 
 		$this->dataSource = $dataSource;
         
