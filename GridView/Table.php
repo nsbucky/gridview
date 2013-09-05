@@ -527,7 +527,7 @@ jQuery(function(){
     public function renderTableBody()
     {
         // if data source is empty show the $noResults text
-        if( empty( $this->dataSource ) ) {
+        if( empty( $this->dataSource ) || count($this->dataSource) == 0 ) {
             ob_start();
             ?>
 <tr>
