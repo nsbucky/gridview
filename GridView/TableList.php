@@ -182,7 +182,7 @@ class TableList extends Table {
             ?>
         <tr>
             <td colspan="2">
-                <?php echo $this->noResultsText;?>\
+                <?php echo $this->noResultsText;?>
             </td>
         </tr>
             <?php
