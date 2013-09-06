@@ -183,7 +183,7 @@ class Table implements \ArrayAccess {
             
             // if arg is just a string, create an array.
             $arg = $arguments[0];
-            if( is_scalar($arg) ) {
+            if( is_string($arg) ) {
                 $arg = array('name'=>$arg);
             }
             

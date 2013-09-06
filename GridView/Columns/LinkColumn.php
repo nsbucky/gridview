@@ -43,12 +43,13 @@ class LinkColumn extends Column {
      */
 	public function getUrl()
 	{
+        $url = $this->url;
 		if(is_callable($this->url)) {
 			$func = $this->url;
-			$this->url = $func($this->data);
+			$url = $func($this->data);
 		}
 
-		return $this->replaceTokens($this->url);
+		return $this->replaceTokens($url);
 	}
 
     /**
@@ -58,12 +59,13 @@ class LinkColumn extends Column {
      */
 	public function getLabel()
 	{
+        $label = $this->label;        
 		if(is_callable($this->label)) {
 			$func = $this->label;
-			$this->label = $func($this->data);
+			$label = $func($this->data);
 		}
 
-		return $this->replaceTokens($this->label);		
+		return $this->replaceTokens($label);		
 	}
 
     /**
