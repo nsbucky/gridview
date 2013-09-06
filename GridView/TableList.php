@@ -46,10 +46,6 @@ class TableList extends Table {
      */
 	public function __construct($dataSource, array $options=null)
 	{		
-		if( is_null($dataSource) ) {
-			throw new \RunTimeException("Datasource must not be an empty");
-		}
-        
         $this->dataSource = $dataSource;
         
 		if( empty($options) ) return;
@@ -181,7 +177,7 @@ class TableList extends Table {
      */
     public function renderTableBody()
     {
-        if( empty($this->dataSource) ) {
+        if( empty($this->dataSource) || count($this->dataSource) == 0 ) {
             ob_start();
             ?>
         <tr>
