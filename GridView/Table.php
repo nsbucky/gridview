@@ -204,7 +204,8 @@ class Table implements \ArrayAccess {
         $allowed = array(
             'tableCss','tableRowCss','sortUrl','itemsPerPage', 'noFilters',
             'itemsPerPageIdentifier', 'sortDirection','noResultsText',
-            'javascript','useJqueryJavascripts', 'showItemsPerPageHeader'
+            'javascript','useJqueryJavascripts', 'showItemsPerPageHeader',
+            'id'
         );
         
         $optionsToSet = array_intersect( $allowed, array_keys($options) );
