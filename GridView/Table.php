@@ -603,7 +603,7 @@ jQuery(function(){
      */
 	public function javaScript()
 	{
-        if( !$this->useJqueryJavascripts ) return;
+        if( $this->useJqueryJavascripts ) {
 		// get default javascript for this table		
 		ob_start();
 		?>
@@ -618,6 +618,7 @@ jQuery(function(){
 </script>		
 		<?php		
 		$this->javascript .= ob_get_clean();
+        }
 		return $this->javascript;
 	}
 
