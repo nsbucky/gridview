@@ -61,8 +61,7 @@ class CheckBoxColumn extends Column {
      * @return string
      */
 	public function getJavascript()
-	{
-        if( !$this->table->useJqueryJavascripts ) return '';
+	{        
 		ob_start()
 		?>
 		<script>
