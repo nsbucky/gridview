@@ -453,12 +453,14 @@ class Table implements \ArrayAccess {
     
     ob_start();
 ?>
+<script>
 jQuery(function(){
 	$("#grid-view-<?php echo $this->itemsPerPageIdentifier?>").change(function(){
 	        var values = $('#<?php echo $this->id;?> .grid-view-filters :input').serialize();
 			window.location = window.location.pathname+'?'+values+"&<?php echo $this->itemsPerPageIdentifier?>="+$(this).val();
 	});
 });
+</script>
 <?php $this->javascript .= ob_get_clean();?>
 <?php
         return ob_get_clean();

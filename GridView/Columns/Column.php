@@ -274,7 +274,7 @@ class Column implements ColumnInterface {
                 return 'Array()';
             }
             
-			return htmlspecialchars( (string) $this->data[$this->name], ENT_QUOTES);
+			return htmlspecialchars( (string) $this->data[$this->name], ENT_QUOTES );
 		}
 
 		if( is_object($this->data) ) {
@@ -283,7 +283,7 @@ class Column implements ColumnInterface {
                 return 'Array()';
             }
             
-			return htmlspecialchars( (string) $this->data->{$this->name}, ENT_QUOTES);
+			return htmlspecialchars( (string) $this->data->{$this->name}, ENT_QUOTES );
 		}
 	}
 
