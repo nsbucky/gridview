@@ -66,13 +66,13 @@ class CheckBoxColumn extends Column {
 		?>
 		<script>
 		jQuery(function(){
-			$('.grid-view-select-all').click(function(){
-				if($(this).checked) {
+			$('.grid-view-select-all').click(function(){                
+				if($(this).is(':checked')) {
 					$('.grid-view-checkbox').attr('checked', true);
 				} else {
 					$('.grid-view-checkbox').attr('checked', false);
 				}
-			});
+			});                       
 		});
 		</script>
 		<?php
