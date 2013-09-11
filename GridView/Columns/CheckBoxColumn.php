@@ -18,7 +18,7 @@ class CheckBoxColumn extends Column {
      */
 	public function getFilter()
 	{
-		return '<input type="checkbox" name="select-all" class="grid-view-select-all">';
+		return '<input type="checkbox" name="grid-view-select-all" class="grid-view-select-all">';
 	}
 
     /**
