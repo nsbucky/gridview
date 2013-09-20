@@ -82,13 +82,4 @@ class LinkColumn extends Column {
 		return parent::getHeader();
 	}
 
-    /**
-     * no filter should be used on this kind of column
-     * 
-     * @return null
-     */
-	public function getFilter()
-	{
-		return null;
-	}
 }
