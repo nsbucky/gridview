@@ -612,7 +612,7 @@ jQuery(function(){
 		?>
 <script>
 jQuery(function(){
-	$('#<?php echo $this->id;?> .grid-view-filters :input').blur(function(){
+	$('#<?php echo $this->id;?> .grid-view-filters :input').not('.grid-view-select-all').blur(function(){
 		// serialize the inputs and submit a form
 		var values = $('#<?php echo $this->id;?> .grid-view-filters :input').serialize();
 		window.location = window.location.pathname+'?'+values;
