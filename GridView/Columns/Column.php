@@ -81,6 +81,12 @@ class Column implements ColumnInterface {
 	public $javascript;
     
     /**
+     * turn off escaping for column value
+     * @var boolean
+     */
+    public $raw = false;
+    
+    /**
      * tokens created from the $dataSource in the format of {key}=>value
      * @var array
      */
@@ -274,7 +280,8 @@ class Column implements ColumnInterface {
                 return 'Array()';
             }
             
-			return htmlspecialchars( (string) $this->data[$this->name], ENT_QUOTES );
+			return $this->raw ? (string) $this->data[$this->name]
+                              : htmlspecialchars( (string) $this->data[$this->name], ENT_QUOTES );
 		}
 
 		if( is_object($this->data) ) {
@@ -283,7 +290,8 @@ class Column implements ColumnInterface {
                 return 'Array()';
             }
             
-			return htmlspecialchars( (string) $this->data->{$this->name}, ENT_QUOTES );
+			return $this->raw ? (string) $this->data->{$this->name}
+                              : htmlspecialchars( (string) $this->data->{$this->name}, ENT_QUOTES );
 		}
 	}
 
