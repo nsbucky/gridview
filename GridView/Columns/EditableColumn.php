@@ -34,7 +34,7 @@ class EditableColumn extends Column {
 </script>
 __JS__;
         
-        return sprintf('<a href="#" id="username" data-type="%s" data-pk="%s" data-url="%s" data-title="%s" %s>%s</a>',
+        return sprintf('<a href="#" class="editable" data-type="%s" data-pk="%s" data-url="%s" data-title="%s" %s>%s</a>',
             $this->fieldType,
             $this->getPrimaryKeyValue(),
             $this->editUrl,
