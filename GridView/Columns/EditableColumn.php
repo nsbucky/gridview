@@ -34,6 +34,10 @@ class EditableColumn extends Column {
 </script>
 __JS__;
         
+        if( strlen($value) > 50 ) {
+            $this->fieldType = 'textarea';
+        }
+        
         return sprintf('<a href="#" class="editable" data-type="%s" data-pk="%s" data-url="%s" data-title="%s" %s>%s</a>',
             $this->fieldType,
             $this->getPrimaryKeyValue(),
