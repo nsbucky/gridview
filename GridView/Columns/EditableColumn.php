@@ -38,7 +38,7 @@ __JS__;
             $this->fieldType = 'textarea';
         }
         
-        return sprintf('<a href="#" class="editable" data-type="%s" data-pk="%s" data-url="%s" data-title="%s" %s>%s</a>',
+        return sprintf('<a href="#" class="editable" data-type="%s" data-pk=\'%s\' data-url="%s" data-title="%s" %s>%s</a>',
             $this->fieldType,
             $this->getPrimaryKeyValue(),
             $this->editUrl,
@@ -53,7 +53,7 @@ __JS__;
         if( count($this->fieldOptions) > 0 ) {
             $s = '';
             foreach( $this->fieldOptions as $optionName=>$optionValue ) {
-                $s .= " data-$optionName=\"$optionValue\" ";
+                $s .= " data-$optionName='$optionValue' ";
             }
             
             return $s;
