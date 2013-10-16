@@ -25,10 +25,9 @@ class DateTimeColumn extends Column {
     public function getJavaScript()
     {
         $js = <<<__JS__
-<script type="text/javascript">   
-   \$('input[name={$this->name}]').unbind('blur');
+<script type="text/javascript">      
    
-   \$('input[name={$this->name}]').daterangepicker({
+   \$('.datetimeColumn').daterangepicker({
         format: "YYYY-MM-DD",
         ranges: {
             'Today': [moment(), moment()],
@@ -40,12 +39,17 @@ class DateTimeColumn extends Column {
          }
     }, function(start, end){
         var values = $('#{$this->table->id} .grid-view-filters :input').serialize();        
-		window.location = window.location.pathname+'?'+values;
+		window.location = window.location.pathname+'?'+values+'&{$this->name}='+start.format('YYYY-MM-DD')+' - '+end.format('YYYY-MM-DD');
     });
    
 </script>       
 __JS__;
         $this->javascript = $js;
         return $js;
+    }
+    
+    public function getFilter()
+    {
+        return '<div class="datetimeColumn"><span class="glyphicon glyphicon-calendar"></span></div>';
     }
 }
