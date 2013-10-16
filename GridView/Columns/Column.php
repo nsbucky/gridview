@@ -223,9 +223,15 @@ class Column implements ColumnInterface {
         
         foreach($options as $key=>$value) {            
             $selected = null;
-            if($selectedValue == $key) {
+            
+            if( $key === '' ) {                
+                $key = null;
+            }
+            
+            if($selectedValue === $key) {
                 $selected = 'selected="selected"';
             }
+            
             $optionsHtml .= sprintf(
                 '<option value="%s" %s>%s</option>', 
                 htmlspecialchars($key, ENT_QUOTES), 
