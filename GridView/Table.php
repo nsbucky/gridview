@@ -293,13 +293,18 @@ class Table implements \ArrayAccess {
      * 
      * @param string $column
      */
-    public function getSortDirectionForColumn($column)
+    public function getSortDirectionForColumn($columnName)
     {
         $sortDirectionSet = isset($_GET['sort_dir']) && $_GET['sort_dir'];
         $sortColumnSet = isset($_GET['sort']) && $_GET['sort'];
+        
+        if( $sortColumnSet 
+            && $columnName != $_GET['sort']) {            
+            return $this->sortDirection;
+        }
                 
-        if(!$sortDirectionSet) return self::SORT_DIRECTION_ASC;
-        if(!$sortColumnSet) return self::SORT_DIRECTION_ASC;
+        if(!$sortDirectionSet) return $this->sortDirection;
+        if(!$sortColumnSet) return $this->sortDirection;
         
         return ($_GET['sort_dir'] === self::SORT_DIRECTION_ASC) 
                ? self::SORT_DIRECTION_DESC
@@ -335,7 +340,7 @@ class Table implements \ArrayAccess {
 		if($column->sortable) {
 			$header['value'] = sprintf('<a href="%s" class="sort-link sort-dir-%s">%s</a>', 
 									   $this->getSortUrl($column->sortableName),
-                                       strtolower($this->sortDirection),
+                                       strtolower($column->sortDirection),
 									   $header['value']
 									   );
 		}

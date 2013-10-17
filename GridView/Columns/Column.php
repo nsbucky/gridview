@@ -71,7 +71,13 @@ class Column implements ColumnInterface {
      * 
      * @var string
      */
-	public $sortableName;
+	public $sortableName;    
+    
+    /**
+     * default sort direction for this column
+     * @var string
+     */
+    public $sortDirection = 'ASC';
     
     /**
      * string of javascript to be used for this column
