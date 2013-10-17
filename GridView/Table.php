@@ -275,11 +275,11 @@ class Table implements \ArrayAccess {
      * @param string $name
      * @return string
      */
-	public function getSortUrl($name)
+	public function getSortUrl($column)
 	{        
-        $this->sortDirection = $this->getSortDirectionForColumn($name);
+        $this->sortDirection = $this->getSortDirectionForColumn($column);
         
-        $query = http_build_query(array('sort'=>$name, 'sort_dir'=>$this->sortDirection));
+        $query = http_build_query(array('sort'=>$column->sortableName, 'sort_dir'=>$this->sortDirection));
         
         if(strpos($this->sortUrl, '?') !== false) {
             return $this->sortUrl .= '&'.$query;
@@ -293,17 +293,24 @@ class Table implements \ArrayAccess {
      * 
      * @param string $column
      */
-    public function getSortDirectionForColumn($columnName)
+    public function getSortDirectionForColumn($column)
     {
         $sortDirectionSet = isset($_GET['sort_dir']) && $_GET['sort_dir'];
-        $sortColumnSet = isset($_GET['sort']) && $_GET['sort'];
-        
+        $sortColumnSet    = isset($_GET['sort']) && $_GET['sort'];
+                
         if( $sortColumnSet 
-            && $columnName != $_GET['sort']) {            
+            && $column->sortableName != $_GET['sort']) {            
             return $this->sortDirection;
         }
-                
-        if(!$sortDirectionSet) return $this->sortDirection;
+        
+        if( !$sortDirectionSet && isset($column->sortDirection) ) {
+            return $column->sortDirection;
+        }
+        
+        if(!$sortDirectionSet) {
+            return $this->sortDirection;
+        }
+        
         if(!$sortColumnSet) return $this->sortDirection;
         
         return ($_GET['sort_dir'] === self::SORT_DIRECTION_ASC) 
@@ -339,8 +346,8 @@ class Table implements \ArrayAccess {
 
 		if($column->sortable) {
 			$header['value'] = sprintf('<a href="%s" class="sort-link sort-dir-%s">%s</a>', 
-									   $this->getSortUrl($column->sortableName),
-                                       strtolower($column->sortDirection),
+									   $this->getSortUrl($column),
+                                       strtolower($this->sortDirection),
 									   $header['value']
 									   );
 		}
