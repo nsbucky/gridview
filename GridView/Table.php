@@ -334,7 +334,7 @@ class Table implements \ArrayAccess {
 
 		if($column->sortable) {
 			$header['value'] = sprintf('<a href="%s" class="sort-link">%s</a>', 
-									   $this->getSortUrl($column->name),
+									   $this->getSortUrl($column->sortableName),
 									   $header['value']
 									   );
 		}
