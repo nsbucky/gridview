@@ -13,7 +13,11 @@ class DateTimeColumn extends Column {
 	public function getValue($index)
 	{
 		$value = parent::getValue($index);
-
+        
+        if( empty($value) ) {
+            return null;
+        }
+        
 		try {
 			$date = new \DateTime($value);
 			return $date->format($this->format);
