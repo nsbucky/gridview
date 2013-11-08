@@ -234,7 +234,7 @@ class Column implements ColumnInterface {
                 $key = null;
             }
             
-            if($selectedValue === $key) {
+            if($selectedValue == $key) {
                 $selected = 'selected="selected"';
             }
             
