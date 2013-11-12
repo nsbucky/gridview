@@ -123,8 +123,8 @@ class Button implements ButtonInterface {
     /**
      * replace any tokens found in string with stuff from the $dataSource
      * 
-     * @param type $string
-     * @return type
+     * @param string $string
+     * @return string
      */
 	public function replaceTokens($string)
 	{		

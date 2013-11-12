@@ -13,7 +13,11 @@ class EditableColumn extends Column {
     public $initialValue; // for selects
     public $editableId = '.editable';
     public $enableEditing = true;
-    
+
+    /**
+     * @param mixed $index
+     * @return string
+     */
     public function getValue( $index )
     {
         $value = parent::getValue( $index );
@@ -47,7 +51,10 @@ __JS__;
             $value
         );
     }
-    
+
+    /**
+     * @return string
+     */
     public function getFieldOptions()
     {
         if( count($this->fieldOptions) > 0 ) {
@@ -61,7 +68,10 @@ __JS__;
         
         return '';
     }
-    
+
+    /**
+     * @return string
+     */
     public function getPrimaryKeyValue()
     {               
         if( is_callable( $this->primaryKey ) ) {

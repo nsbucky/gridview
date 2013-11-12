@@ -16,7 +16,10 @@ class DeleteButton extends Button {
 		parent::__construct($config);
 	}
 
-	public function render()
+    /**
+     * @return string
+     */
+    public function render()
 	{
 		$url = $this->getUrl($this->tokens);
 		$label = $this->getLabel($this->tokens);

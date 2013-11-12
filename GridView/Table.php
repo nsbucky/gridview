@@ -1,6 +1,6 @@
 <?php namespace GridView;
 
-use Columns\Column;
+use GridView\Columns\Column;
 
 /**
  * Table Class
@@ -169,8 +169,10 @@ class Table implements \ArrayAccess {
     /**
      * magic method for adding button types like addCalcColumn()
      * 
-     * @param type $name
-     * @param type $arguments
+     * @param mixed $name
+     * @param array $arguments
+     * @throws \BadFunctionCallException
+     * @return GridView
      */
     public function __call( $name, $arguments )
     {
@@ -235,7 +237,7 @@ class Table implements \ArrayAccess {
      * retrieve a column from this table via array access
      * 
      * @param mixed $id
-     * @return GridView\Columns\Column
+     * @return \GridView\Columns\Column
      * @throws \Exception
      */
     public function offsetGet($id)
@@ -272,7 +274,7 @@ class Table implements \ArrayAccess {
      * generate and retrieve the url with sort parameters using the $sortDirection
      * and $sortUrl for given column $name
      * 
-     * @param string $name
+     * @param string $column
      * @return string
      */
 	public function getSortUrl($column)
@@ -292,6 +294,7 @@ class Table implements \ArrayAccess {
      * Get sort direction for column based on query string
      * 
      * @param string $column
+     * @return string
      */
     public function getSortDirectionForColumn($column)
     {
@@ -364,7 +367,7 @@ class Table implements \ArrayAccess {
      * add column to footers array if the $name property is set in the column
      * and if not just add a null value to footer to account for column count
      * 
-     * @param GridView\Columns\Column $column
+     * @param \GridView\Columns\Column $column
      */
     protected function setTableFooter($column)
     {
@@ -563,8 +566,8 @@ jQuery(function(){
     /**
      * REnder a table row
      * 
-     * @param type $data
-     * @param type $index
+     * @param mixed $data
+     * @param integer $index
      * @return string
      */
     public function renderTableRow($data, $index)
@@ -597,8 +600,8 @@ jQuery(function(){
      * function, use the data set from the current row of $dataSource to help
      * evaluate what string of css should be returned. 
      * 
-     * @param type $data
-     * @param type $index
+     * @param mixed $data
+     * @param integer $index
      * @return string
      */
 	public function getTableRowCss($data, $index)
@@ -654,8 +657,8 @@ jQuery(function(){
     /**
      * set footer value in $footers array
      * 
-     * @param type $name
-     * @param type $value
+     * @param string $name
+     * @param string $value
      */
 	public function setFooterValue($name, $value)
 	{

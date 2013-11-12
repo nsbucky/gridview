@@ -9,7 +9,11 @@ class TotalColumn extends Column {
 	public $format;
 	public $cellCss = 'grid-view-total-column';
 
-	public function getValue($index)
+    /**
+     * @param mixed $index
+     * @return string
+     */
+    public function getValue($index)
 	{
 		$value = parent::getValue($index);
 		$total = $this->table->getFooterValue($this->name);
@@ -17,7 +21,10 @@ class TotalColumn extends Column {
 		return $value;		
 	}
 
-	public function getFooter()
+    /**
+     * @return array
+     */
+    public function getFooter()
 	{
         // if format is not a callable function, then lets make one that just 
         // returns the total as a number
