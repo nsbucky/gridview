@@ -340,7 +340,7 @@ class Table implements \ArrayAccess {
         
 		$column->setTable($this);
 
-		if(!$column->isVisible()) return;
+		if(!$column->isVisible()) return $this;
 
 		$header = array(
 			'value' => $column->getHeader(),
