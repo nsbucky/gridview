@@ -54,6 +54,10 @@ __JS__;
     
     public function getFilter()
     {
-        return '<div class="datetimeColumn"><span class="glyphicon glyphicon-calendar"></span></div>';
+        $dateValue = '';
+        if( isset( $_GET[$this->name]) ) {
+            $dateValue = htmlentities( $_GET[$this->name] );
+        }
+        return '<div class="datetimeColumn" title="Showing: '.$dateValue.'"><span class="glyphicon glyphicon-calendar"></span></div>';
     }
 }
