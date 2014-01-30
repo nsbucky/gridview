@@ -21,7 +21,7 @@ class TableList extends Table {
      * 
      * @var string
      */
-    public $tableCss      = 'table table-striped';	
+    public $tableCss      = 'table table-striped table-bordered';	
     
     /**
      * the string to use for the header column
