@@ -12,15 +12,15 @@ class LinkColumn extends Column {
 	public $cellCss = 'grid-view-link-column';
 	
     /**
-     * Constructor. Turn off sorting for this column
+     * Constructor. 
      * 
      * @param array $config
      */
 	public function __construct(array $config)
 	{
-		$this->sortable = false;
+		//$this->sortable = false;
 		
-		unset($config['sortable'], $config['sortableName']);
+		//unset($config['sortable'], $config['sortableName']);
 
 		parent::__construct($config);
 	}
