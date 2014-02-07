@@ -333,7 +333,7 @@ class Column implements ColumnInterface {
         }
 
 		foreach((array) $data as $key=>$value) {
-            if( is_array($value) ) continue;
+            if( is_array($value) || is_object($value) ) continue;
 			$this->tokens['{'.$key.'}'] = (string) $value;
 		}
 

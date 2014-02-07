@@ -12,7 +12,7 @@ class LinkColumn extends Column {
 	public $cellCss = 'grid-view-link-column';
 	
     /**
-     * Constructor. 
+     * Constructor.
      * 
      * @param array $config
      */
