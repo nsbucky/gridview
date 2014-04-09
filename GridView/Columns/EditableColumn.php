@@ -94,7 +94,7 @@ __JS__;
     public function getJavaScript()
     {
         //assume server response: 200 Ok {status: 'error', msg: 'field cannot be empty!'}
-        $this->table->javascript =<<<__JS__
+        $this->table->javascript .= <<<__JS__
 <script type="text/javascript">
     jQuery(function(){jQuery('$this->editableId').editable({
             success: function(response, newValue){
