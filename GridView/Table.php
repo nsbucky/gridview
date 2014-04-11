@@ -282,7 +282,7 @@ class Table implements \ArrayAccess {
         $this->sortDirection = $this->getSortDirectionForColumn($column);
 
         // append with get stuff.
-        $qs = $_GET + array('sort'=>$column->sortableName, 'sort_dir'=>$this->sortDirection);
+        $qs = array_merge($_GET,  array('sort'=>$column->sortableName, 'sort_dir'=>$this->sortDirection));
 
         $query = http_build_query( $qs );
 
@@ -301,27 +301,15 @@ class Table implements \ArrayAccess {
      */
     public function getSortDirectionForColumn($column)
     {
-        $sortDirectionSet = isset($_GET['sort_dir']) && $_GET['sort_dir'];
-        $sortColumnSet    = isset($_GET['sort']) && $_GET['sort'];
-                
-        if( $sortColumnSet 
-            && $column->sortableName != $_GET['sort']) {            
-            return $this->sortDirection;
+        $sortDirection = $column->sortDirection ?: self::SORT_DIRECTION_ASC;
+
+        if( isset( $_GET['sort']) && $_GET['sort'] == $column->sortableName ) {
+            $sortDirection = (isset($_GET['sort_dir'] ) &&  $_GET['sort_dir'] == self::SORT_DIRECTION_ASC)
+                ? self::SORT_DIRECTION_DESC
+                : self::SORT_DIRECTION_ASC;
         }
-        
-        if( !$sortDirectionSet && isset($column->sortDirection) ) {
-            return $column->sortDirection;
-        }
-        
-        if(!$sortDirectionSet) {
-            return $this->sortDirection;
-        }
-        
-        if(!$sortColumnSet) return $this->sortDirection;
-        
-        return ($_GET['sort_dir'] === self::SORT_DIRECTION_ASC) 
-               ? self::SORT_DIRECTION_DESC
-               : self::SORT_DIRECTION_ASC;
+
+        return $sortDirection;
     }
 
     /**
