@@ -277,18 +277,21 @@ class Table implements \ArrayAccess {
      * @param string $column
      * @return string
      */
-	public function getSortUrl($column)
-	{        
+    public function getSortUrl($column)
+    {
         $this->sortDirection = $this->getSortDirectionForColumn($column);
-        
-        $query = http_build_query(array('sort'=>$column->sortableName, 'sort_dir'=>$this->sortDirection));
-        
+
+        // append with get stuff.
+        $qs = $_GET + array('sort'=>$column->sortableName, 'sort_dir'=>$this->sortDirection);
+
+        $query = http_build_query( $qs );
+
         if(strpos($this->sortUrl, '?') !== false) {
             return $this->sortUrl .= '&'.$query;
         }
-        
-		return $this->sortUrl.'?'.$query;
-	}
+
+        return $this->sortUrl.'?'.$query;
+    }
     
     /**
      * Get sort direction for column based on query string
