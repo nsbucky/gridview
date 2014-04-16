@@ -79,7 +79,7 @@ class Table implements \ArrayAccess {
     protected $headers    = array();
 
     /**
-     * Collection of footeres taken from the added columns
+     * Collection of footers taken from the added columns
      *
      * @var string
      */
@@ -148,10 +148,6 @@ class Table implements \ArrayAccess {
      */
     public $noFilters       = false;
 
-    /**
-     * do not show filters by default.
-     * @var bool
-     */
     public $useColumnFilters = false;
 
     /**
@@ -159,6 +155,17 @@ class Table implements \ArrayAccess {
      * @var bool
      */
     public $useModalFilters = true;
+
+    /**
+     * function to determine column visibility, like from session?
+     * @callable
+     */
+    public static $visibleColumnsCallback;
+
+    /**
+     * @var array
+     */
+    protected $visibleColumns = array();
 
     /**
      * Constructor
@@ -171,6 +178,11 @@ class Table implements \ArrayAccess {
     {
 
         $this->dataSource = $dataSource;
+
+        if( is_callable( self::$visibleColumnsCallback ) ) {
+            $callback = self::$visibleColumnsCallback;
+            $this->visibleColumns = $callback();
+        }
 
         if( empty($options) ) return;
 
@@ -343,23 +355,23 @@ class Table implements \ArrayAccess {
 
         $column->setTable($this);
 
-        if(!$column->isVisible()) return $this;
+        $this->javascript .= $column->getJavaScript();
 
-        $header = array(
-            'value' => $column->getHeader(),
-            'filter' => $column->getFilter(),
-        );
-
-        if($column->sortable) {
-            $header['value'] = sprintf('<a href="%s" class="sort-link sort-dir-%s">%s</a>',
-                $this->getSortUrl($column),
-                strtolower($this->sortDirection),
-                $header['value']
-            );
+        // if column is not meant to be visible, like for admin reasons, take it out of the visible columns
+        if( ! $column->isVisible() ) {
+            $flip = array_flip($this->visibleColumns);
+            unset($flip[$column->name]);
+            $this->visibleColumns = $flip;
         }
 
-        $this->javascript .= $column->getJavaScript();
-        $this->headers[]   = $header;
+        if( $this->visibleColumns !== false && ! in_array($column->name, $this->visibleColumns)) {
+            $column->visible = false;
+        }
+
+        if( $column->isVisible() ) {
+            $this->headers[] = 1;
+        }
+
         $this->columns[]   = $column;
 
         $this->setTableFooter($column);
@@ -374,12 +386,9 @@ class Table implements \ArrayAccess {
      */
     protected function setTableFooter($column)
     {
-        if(isset($column->name)) {
+        if(isset($column->name) && $column->isVisible() ) {
             $this->footers[$column->name] = $column->getFooter();
-            return;
         }
-
-        $this->footers[] = null;
     }
 
     /**
@@ -392,15 +401,16 @@ class Table implements \ArrayAccess {
         ob_start();
         $headers = array();
         $filters = array();
-        foreach($this->headers as $h):
-            $headers[] = $h['value'];
-            $filters[] = $h['filter'];
+        foreach($this->columns as $c):
+            if( ! $c->isVisible() ) continue;
+            $headers[] = $c->getHeader();
+            $filters[] = $c->getFilter();
         endforeach;
         ?>
         <tr class="grid-view-headers">
             <th><?php echo implode("\n</th>\n<th>\n", $headers);?></th>
         </tr>
-        <?php if( $this->noFilters ) return ob_get_clean();?>
+        <?php if( ! $this->useColumnFilters ) return ob_get_clean();?>
         <tr class="grid-view-filters">
             <th><?php echo implode("\n</th>\n<th>\n", $filters);?></th>
         </tr>
@@ -426,14 +436,14 @@ class Table implements \ArrayAccess {
 
             $checked = null;
 
-            if( $c->visible ) {
+            if( $c->isVisible() ) {
                 $checked = 'checked="checked"';
             }
 
             $filters[] = '<div class="form-group">
                             <label class="checkbox">
                             <input type="checkbox" name="columns['.$c->name.']" value="1" '.$checked.'>
-                            '.$c->getHeader().'</label>'.$filter.'</div>';
+                            '.$c->getHeaderName().'</label>'.$filter.'</div>';
         }
 
         $filters = implode(PHP_EOL, $filters);
@@ -647,6 +657,7 @@ MODAL;
         ?>
         <tr class="<?php echo $this->getTableRowCss($data, $index);?>">
             <?php foreach($this->columns as $column) { ?>
+                <?php if( ! $column->isVisible() ) continue; ?>
                 <td class="<?php echo $column->cellCss;?>">
                     <?php echo $column->setData($data)->getValue($index);?>
                 </td>

@@ -7,50 +7,72 @@
  * http://www.dangrossman.info/2012/08/20/a-date-range-picker-for-twitter-bootstrap/
  */
 class DateTimeColumn extends Column {
-	public $format = 'Y-m-d H:i:s';	
-	public $cellCss = 'grid-view-datetime-column';
+    public $format = 'Y-m-d H:i:s';
+    public $cellCss = 'grid-view-datetime-column';
 
-	public function getValue($index)
-	{
-		$value = parent::getValue($index);
-        
+    public function getValue($index)
+    {
+        $value = parent::getValue($index);
+
         if( empty($value) ) {
             return null;
         }
-        
-		try {
-			$date = new \DateTime($value);
-			return $date->format($this->format);
-		} catch (\Exception $e) {
-			return $e->getMessage();
-		}		
-	}
-    
+
+        try {
+            $date = new \DateTime($value);
+            return $date->format($this->format);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
     public function getJavaScript()
     {
-        $this->table->javascript .= <<<__JS__
-<script type="text/javascript">      
-   
+        if( $this->table->useModalFilters ) {
+            $this->table->javascript .= <<<__JS__
+<script type="text/javascript">
+
    \$('.datetimeColumn').daterangepicker({
         format: "YYYY-MM-DD",
         ranges: {
             'Today': [moment(), moment()],
             'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
             'Last 7 Days': [moment().subtract('days', 6), moment()],
-            'Last 30 Days': [moment().subtract('days', 29), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+            'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
+            'Month To Date': [moment().startOf('month'), moment()],
+            'Year To Date': [moment().startOf('year'), moment()]
          }
-    }, function(start, end){
-        var values = $('#{$this->table->id} .grid-view-filters :input').serialize();        
-		window.location = window.location.pathname+'?'+values+'&{$this->name}='+start.format('YYYY-MM-DD')+' - '+end.format('YYYY-MM-DD');
     });
-   
-</script>       
+
+</script>
 __JS__;
 
+        } else {
+
+            $this->table->javascript .= <<<__JS__
+<script type="text/javascript">
+
+   \$('.datetimeColumn').daterangepicker({
+        format: "YYYY-MM-DD",
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+            'Last 7 Days': [moment().subtract('days', 6), moment()],
+            'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
+            'Month To Date': [moment().startOf('month'), moment()],
+            'Year To Date': [moment().startOf('year'), moment()]
+         }
+    }, function(start, end){
+        var values = $('#{$this->table->id} .grid-view-filters :input').serialize();
+		window.location = window.location.pathname+'?'+values+'&{$this->name}='+start.format('YYYY-MM-DD')+' - '+end.format('YYYY-MM-DD');
+    });
+
+</script>
+__JS__;
+        }
+
     }
-    
+
     public function getFilter()
     {
         $dateValue = '';
@@ -61,7 +83,7 @@ __JS__;
         if( $this->table->useModalFilters ) {
             return sprintf(
                 '<div class="grid-view-filter-container">
-                <input type="text" name="%s" style="width:100%%" class="grid-view-filter input-small form-control datetimeColumn" value="%s">
+                <input type="text" name="%s" class="grid-view-filter input-small form-control datetimeColumn" value="%s">
                 </div>',
                 $this->name,
                 $dateValue
