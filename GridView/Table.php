@@ -148,6 +148,10 @@ class Table implements \ArrayAccess {
      */
     public $noFilters       = false;
 
+    /**
+     * do not show filters by default.
+     * @var bool
+     */
     public $useColumnFilters = false;
 
     /**

@@ -28,7 +28,7 @@ class DateTimeColumn extends Column {
     
     public function getJavaScript()
     {
-        $js = <<<__JS__
+        $this->table->javascript .= <<<__JS__
 <script type="text/javascript">      
    
    \$('.datetimeColumn').daterangepicker({
@@ -48,8 +48,7 @@ class DateTimeColumn extends Column {
    
 </script>       
 __JS__;
-        $this->javascript = $js;
-        return $js;
+
     }
     
     public function getFilter()
@@ -58,6 +57,17 @@ __JS__;
         if( isset( $_GET[$this->name]) ) {
             $dateValue = htmlentities( $_GET[$this->name] );
         }
+
+        if( $this->table->useModalFilters ) {
+            return sprintf(
+                '<div class="grid-view-filter-container">
+                <input type="text" name="%s" style="width:100%%" class="grid-view-filter input-small form-control datetimeColumn" value="%s">
+                </div>',
+                $this->name,
+                $dateValue
+            );
+        }
+
         return '<div class="datetimeColumn" title="Showing: '.$dateValue.'"><span class="glyphicon glyphicon-calendar"></span></div>';
     }
 }
