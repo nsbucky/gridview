@@ -166,7 +166,7 @@ class Column implements ColumnInterface {
     {
         $value = null;
         
-        if(isset($_GET[$this->name])) {
+        if(isset($_GET[$this->name]) && ! is_array( $_GET[$this->name] ) ) {
             $value = htmlentities($_GET[$this->name], ENT_QUOTES);            
         }
         
