@@ -386,7 +386,7 @@ class Table implements \ArrayAccess {
      */
     protected function setTableFooter($column)
     {
-        if(isset($column->name) && $column->isVisible() ) {
+        if( $column->isVisible() ) {
             $this->footers[$column->name] = $column->getFooter();
         }
     }
