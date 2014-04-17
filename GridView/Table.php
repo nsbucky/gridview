@@ -448,6 +448,9 @@ class Table implements \ArrayAccess {
         $filters = implode(PHP_EOL, $filters);
 
         $hidden = '';
+
+        unset($_GET['columns']);
+
         foreach( $_GET as $k => $v ) {
 
             $k = htmlspecialchars( $k, ENT_COMPAT);
