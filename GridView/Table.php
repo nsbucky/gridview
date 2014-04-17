@@ -231,7 +231,7 @@ class Table implements \ArrayAccess {
             'tableCss','tableRowCss','sortUrl','itemsPerPage', 'noFilters',
             'itemsPerPageIdentifier', 'sortDirection','noResultsText',
             'javascript','useJqueryJavascripts', 'showItemsPerPageHeader',
-            'id'
+            'id','useModalFilters','useColumnFilters'
         );
 
         $optionsToSet = array_intersect( $allowed, array_keys($options) );
