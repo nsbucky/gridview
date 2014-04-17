@@ -148,6 +148,9 @@ class Table implements \ArrayAccess {
      */
     public $noFilters       = false;
 
+    /**
+     * @var bool
+     */
     public $useColumnFilters = false;
 
     /**
@@ -174,20 +177,15 @@ class Table implements \ArrayAccess {
      * @param array $options
      * @throws \RunTimeException on $emptyDataSource
      */
-    public function __construct($dataSource, array $options=null)
+    public function __construct($dataSource, array $options=array())
     {
-
         $this->dataSource = $dataSource;
+        $this->setConfigOptions($options);
 
         if( is_callable( self::$visibleColumnsCallback ) ) {
             $callback = self::$visibleColumnsCallback;
-            $this->visibleColumns = $callback();
+            $this->visibleColumns = $callback($this->id);
         }
-
-        if( empty($options) ) return;
-
-        $this->setConfigOptions($options);
-
     }
 
     /**
@@ -225,7 +223,7 @@ class Table implements \ArrayAccess {
      *
      * @param array $options
      */
-    protected function setConfigOptions(array $options)
+    protected function setConfigOptions(array $options = array())
     {
         $allowed = array(
             'tableCss','tableRowCss','sortUrl','itemsPerPage', 'noFilters',
@@ -364,7 +362,7 @@ class Table implements \ArrayAccess {
             $this->visibleColumns = $flip;
         }
 
-        if( $this->visibleColumns !== false && ! in_array($column->name, $this->visibleColumns)) {
+        if( ! $this->noFilters && $this->visibleColumns !== false && ! in_array($column->name, $this->visibleColumns)) {
             $column->visible = false;
         }
 
@@ -430,6 +428,7 @@ class Table implements \ArrayAccess {
         $filters = array();
 
         foreach($this->columns as $c) {
+
             $filter = $c->getFilter();
 
             if( empty($filter) ) continue;
@@ -448,6 +447,29 @@ class Table implements \ArrayAccess {
 
         $filters = implode(PHP_EOL, $filters);
 
+        $hidden = '';
+        foreach( $_GET as $k => $v ) {
+
+            $k = htmlspecialchars( $k, ENT_COMPAT);
+
+            if( is_array( $v ) ) {
+                foreach( $v as $_k => $_v ) {
+                    $_v = htmlspecialchars( $_v, ENT_COMPAT);
+
+                    if( is_scalar($_k) ) {
+                        $hidden .= "<input type='hidden' value='$_v' name='{$k}[$_k]'>".PHP_EOL;
+                    } else {
+                        $hidden .= "<input type='hidden' value='$_v' name='{$k}[]'>".PHP_EOL;
+                    }
+
+                }
+                continue;
+            }
+
+            $hidden .= "<input type='hidden' value='$v' name='$k'>".PHP_EOL;
+
+        }
+
         $html = <<<MODAL
 
 <button type="button" data-toggle="modal" href="#modal-grid-filters" class="btn btn-success"><i class="fa fa-search-plus"></i> Filter Table</button>
@@ -462,6 +484,7 @@ class Table implements \ArrayAccess {
             </div>
             <div class="modal-body">
                 <form action="" method="get" id="grid-filter-form">
+                    $hidden
                     $filters
                 </form>
             </div>
