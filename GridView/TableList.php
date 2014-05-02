@@ -59,9 +59,8 @@ class TableList extends Table {
      * set public variables from an array passed as configuration array
      *
      * @param array $options
-     * @param array $addAllowed
      */
-    protected function setConfigOptions(array $options, array $addAllowed=null)
+    protected function setConfigOptions(array $options)
     {
         $allowed = array(
             'tableCss','tableRowCss','sortUrl','itemsPerPage',

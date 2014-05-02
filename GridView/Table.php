@@ -223,7 +223,7 @@ class Table implements \ArrayAccess {
      *
      * @param array $options
      */
-    protected function setConfigOptions(array $options = array())
+    protected function setConfigOptions(array $options)
     {
         $allowed = array(
             'tableCss','tableRowCss','sortUrl','itemsPerPage', 'noFilters',
