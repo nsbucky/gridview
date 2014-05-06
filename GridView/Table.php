@@ -362,7 +362,7 @@ class Table implements \ArrayAccess {
             $this->visibleColumns = $flip;
         }
 
-        if( ! $this->noFilters && $this->visibleColumns !== false && ! in_array($column->name, $this->visibleColumns)) {
+        if( ! $this->noFilters && $this->visibleColumns != false && ! in_array($column->name, $this->visibleColumns)) {
             $column->visible = false;
         }
 
@@ -486,6 +486,7 @@ class Table implements \ArrayAccess {
                 <h4 class="modal-title">Filter Table</h4>
             </div>
             <div class="modal-body">
+                <label><input type="checkbox" class="select-all-fields">Select All</label>
                 <form action="" method="get" id="grid-filter-form">
                     $hidden
                     $filters
@@ -502,6 +503,10 @@ class Table implements \ArrayAccess {
 <script type="text/javascript">
     $('#modal-grid-filters .modal-save').click(function(){
         $('#grid-filter-form').submit();
+    });
+    $('.select-all-fields').click(function(){
+        var checks = $('.modal-body :checkbox');
+        checks.prop("checked", $(this).is(':checked'));
     });
 </script>
 MODAL;
