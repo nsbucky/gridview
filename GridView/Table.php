@@ -622,8 +622,12 @@ MODAL;
 
         // add in auto button columns
         if( !empty( $this->buttons ) ) {
-            $this->addColumn(new Columns\ButtonColumn(array('buttons'=>$this->buttons)));
+
+            $column = new Columns\ButtonColumn(array('buttons'=>$this->buttons));
+            $this->visibleColumns[] = $column->name;
+            $this->addColumn( $column );
         }
+
         ob_start();
 
         if($this->showItemsPerPageHeader) echo $this->renderItemsPerPage();
