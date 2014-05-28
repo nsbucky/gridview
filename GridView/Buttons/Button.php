@@ -7,8 +7,9 @@ class Button implements ButtonInterface {
      * 
      * @var string
      */
-	public $css = 'btn btn-xs';
-    
+
+	public $css = 'btn btn-xs btn-default';
+
     /**
      * url to be used for link
      * 
@@ -123,8 +124,8 @@ class Button implements ButtonInterface {
     /**
      * replace any tokens found in string with stuff from the $dataSource
      * 
-     * @param type $string
-     * @return type
+     * @param string $string
+     * @return string
      */
 	public function replaceTokens($string)
 	{		

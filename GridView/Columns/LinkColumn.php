@@ -12,15 +12,15 @@ class LinkColumn extends Column {
 	public $cellCss = 'grid-view-link-column';
 	
     /**
-     * Constructor. Turn off sorting for this column
+     * Constructor.
      * 
      * @param array $config
      */
 	public function __construct(array $config)
 	{
-		$this->sortable = false;
+		//$this->sortable = false;
 		
-		unset($config['sortable'], $config['sortableName']);
+		//unset($config['sortable'], $config['sortableName']);
 
 		parent::__construct($config);
 	}
@@ -43,12 +43,13 @@ class LinkColumn extends Column {
      */
 	public function getUrl()
 	{
+        $url = $this->url;
 		if(is_callable($this->url)) {
 			$func = $this->url;
-			$this->url = $func($this->data);
+			$url = $func($this->data);
 		}
 
-		return $this->replaceTokens($this->url);
+		return $this->replaceTokens($url);
 	}
 
     /**
@@ -58,12 +59,13 @@ class LinkColumn extends Column {
      */
 	public function getLabel()
 	{
+        $label = $this->label;        
 		if(is_callable($this->label)) {
 			$func = $this->label;
-			$this->label = $func($this->data);
+			$label = $func($this->data);
 		}
 
-		return $this->replaceTokens($this->label);		
+		return $this->replaceTokens($label);		
 	}
 
     /**
@@ -77,16 +79,7 @@ class LinkColumn extends Column {
 			return $this->header;
 		}
 
-		return null;
+		return parent::getHeader();
 	}
 
-    /**
-     * no filter should be used on this kind of column
-     * 
-     * @return null
-     */
-	public function getFilter()
-	{
-		return null;
-	}
 }
