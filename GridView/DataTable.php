@@ -191,7 +191,7 @@ class DataTable extends Table {
         <script>
             jQuery(function(){
                 $('#<?php echo $this->id?>').dataTable({
-                    "sDom" : "R<'dt-top-row'Cl>r<'dt-wrapper't><'dt-row dt-bottom-row'<'row'<'col-sm-6'i><'col-sm-6 text-right'p>>",
+                    "sDom" : "R<'dt-top-row'Ci>r<'dt-wrapper't><'dt-row dt-bottom-row'<'row'<'col-sm-12 text-left'p>>",
                     "sPaginationType" : "bootstrap_full",
                     "bStateSave": true,
                     "bSortCellsTop" : true,
@@ -260,7 +260,7 @@ class DataTable extends Table {
 
         $html = <<<MODAL
 
-<button type="button" data-toggle="modal" href="#modal-grid-filters" class="btn btn-success"><i class="fa fa-search-plus"></i> Filter Table</button>
+<button type="button" data-toggle="modal" href="#modal-grid-filters" class="btn btn-default btn-sm"><i class="fa fa-search-plus"></i> Filter Table</button>
 
 <!-- Modal -->
 <div class="modal fade" id="modal-grid-filters" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
