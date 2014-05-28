@@ -110,7 +110,14 @@ class DataTable extends Table {
             <div>
                 <div class="jarviswidget-editbox"></div>
                 <div class="widget-body no-padding">
-                    <div class="widget-body-toolbar"><?php echo $this->renderModalFilters();?></div>
+                    <div class="widget-body-toolbar">
+                        <?php echo $this->renderModalFilters();?>
+                        <p class="pull-right">
+                            Showing <?php echo $this->dataSource->getFrom();?>
+                            to <?php echo $this->dataSource->getTo();?>
+                            of <?php echo $this->dataSource->getTotal();?>
+                        </p>
+                    </div>
                     <table class="<?php echo $this->tableCss;?>" id="<?php echo $this->id;?>">
                         <thead>
                         <?php echo $this->renderHeader();?>
@@ -120,6 +127,9 @@ class DataTable extends Table {
                         <?php echo $this->renderTableBody();?>
                         </tbody>
                     </table>
+                    <div class="dt-row dt-bottom-row">
+                        <?php echo $this->dataSource->links(); ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -184,14 +194,13 @@ class DataTable extends Table {
      */
     public function javaScript()
     {
-
         // get default javascript for this table
         ob_start();
         ?>
         <script>
             jQuery(function(){
                 $('#<?php echo $this->id?>').dataTable({
-                    "sDom" : "R<'dt-top-row'Ci>r<'dt-wrapper't><'dt-row dt-bottom-row'<'row'<'col-sm-12 text-left'p>>",
+                    "sDom" : "R<'dt-top-row'C>r<'dt-wrapper't>>",
                     "sPaginationType" : "bootstrap_full",
                     "bStateSave": true,
                     "bSortCellsTop" : true,
