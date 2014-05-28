@@ -604,6 +604,10 @@ MODAL;
 
         $dataSample = $this->dataSource[0];
 
+        if(is_object($dataSample) && method_exists($dataSample, 'toArray')) {
+            $dataSample = $dataSample->toArray();
+        }
+
         foreach((array) $dataSample as $key=>$value) {
             $this->addColumn(array('name'=>$key));
         }
