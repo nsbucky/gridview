@@ -55,7 +55,7 @@ class DataTable extends Table {
      * use the modal filter by default. the column headers are freaking annoying as fuck.
      * @var bool
      */
-    public $useModalFilters = false;
+    public $useModalFilters = true;
 
     public $headerText = 'Viewing All';
 
@@ -110,7 +110,7 @@ class DataTable extends Table {
             <div>
                 <div class="jarviswidget-editbox"></div>
                 <div class="widget-body no-padding">
-                    <div class="widget-body-toolbar"></div>
+                    <div class="widget-body-toolbar"><?php echo $this->renderModalFilters();?></div>
                     <table class="<?php echo $this->tableCss;?>" id="<?php echo $this->id;?>">
                         <thead>
                         <?php echo $this->renderHeader();?>
@@ -191,7 +191,7 @@ class DataTable extends Table {
         <script>
             jQuery(function(){
                 $('#<?php echo $this->id?>').dataTable({
-                    "sDom" : "R<'dt-top-row'Clf>r<'dt-wrapper't><'dt-row dt-bottom-row'<'row'<'col-sm-6'i><'col-sm-6 text-right'p>>",
+                    "sDom" : "R<'dt-top-row'Cl>r<'dt-wrapper't><'dt-row dt-bottom-row'<'row'<'col-sm-6'i><'col-sm-6 text-right'p>>",
                     "sPaginationType" : "bootstrap_full",
                     "bStateSave": true,
                     "bSortCellsTop" : true,
@@ -205,6 +205,95 @@ class DataTable extends Table {
         $this->javascript .= ob_get_clean();
 
         return $this->javascript;
+    }
+
+    /**
+     * @return string
+     */
+    public function renderModalFilters()
+    {
+
+        $filters = array();
+
+        foreach($this->columns as $c) {
+
+            $filter = $c->getFilter();
+
+            if( empty($filter) ) continue;
+
+            $checked = null;
+
+            if( $c->isVisible() ) {
+                $checked = 'checked="checked"';
+            }
+
+            $filters[] = '<div class="form-group"><label>'.$c->getHeaderName().'</label>'.$filter.'</div>';
+        }
+
+        $filters = implode(PHP_EOL, $filters);
+
+        $hidden = '';
+
+        unset($_GET['columns']);
+
+        foreach( $_GET as $k => $v ) {
+
+            $k = htmlspecialchars( $k, ENT_COMPAT);
+
+            if( is_array( $v ) ) {
+                foreach( $v as $_k => $_v ) {
+                    $_v = htmlspecialchars( $_v, ENT_COMPAT);
+
+                    if( is_scalar($_k) ) {
+                        $hidden .= "<input type='hidden' value='$_v' name='{$k}[$_k]'>".PHP_EOL;
+                    } else {
+                        $hidden .= "<input type='hidden' value='$_v' name='{$k}[]'>".PHP_EOL;
+                    }
+
+                }
+                continue;
+            }
+
+            $hidden .= "<input type='hidden' value='$v' name='$k'>".PHP_EOL;
+
+        }
+
+        $html = <<<MODAL
+
+<button type="button" data-toggle="modal" href="#modal-grid-filters" class="btn btn-success"><i class="fa fa-search-plus"></i> Filter Table</button>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-grid-filters" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Filter Table</h4>
+            </div>
+            <div class="modal-body">
+                <form action="" method="get" id="grid-filter-form">
+                    $hidden
+                    $filters
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary modal-save">Filter</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+    $('#modal-grid-filters .modal-save').click(function(){
+        $('#grid-filter-form').submit();
+    });
+
+</script>
+MODAL;
+
+        return $html;
+
     }
 
 }
