@@ -791,22 +791,24 @@ MODAL;
     /**
      * Convenience function for quickly added a button with a label of View
      * @param string $url
+     * @param array $config
      * @return \GridView\Table
      */
-    public function addViewButton($url)
+    public function addViewButton($url, array $config=array())
     {
-        $this->buttons[] = new Buttons\ViewButton($url);
+        $this->buttons[] = new Buttons\ViewButton($url, $config);
         return $this;
     }
 
     /**
      * Convenience function for quickly added a button with a label of Edit
      * @param string $url
+     * @param array $config
      * @return \GridView\Table
      */
-    public function addEditButton($url)
+    public function addEditButton($url, array $config=array())
     {
-        $this->buttons[] = new Buttons\EditButton($url);
+        $this->buttons[] = new Buttons\EditButton($url, $config);
         return $this;
     }
 
@@ -814,11 +816,12 @@ MODAL;
      * Convenience function for quickly added a button with a label of Delete
      *
      * @param string $url
+     * @param array $config
      * @return \GridView\Table
      */
-    public function addDeleteButton($url)
+    public function addDeleteButton($url, array $config=array())
     {
-        $this->buttons[] = new Buttons\DeleteButton($url);
+        $this->buttons[] = new Buttons\DeleteButton($url, $config);
         return $this;
     }
 }
