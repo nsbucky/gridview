@@ -30,16 +30,6 @@ class DataTable extends Table {
     public $useJqueryJavascripts = true;
 
     /**
-     * Collection of buttons added via the addEditButton(), addViewButton, and
-     * addDeleteButton() methods. Those convenience methods bypass normal column
-     * creation, and this groups them all together into the same column, which is
-     * usually what you want for the table
-     *
-     * @var array
-     */
-    protected $buttons = array();
-
-    /**
      * if set to true, the filters row in the header will be turned off.
      *
      * @var boolean
