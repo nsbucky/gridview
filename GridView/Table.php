@@ -139,7 +139,7 @@ class Table implements \ArrayAccess {
      *
      * @var array
      */
-    protected $buttons = array();
+    public $buttons = array();
 
     /**
      * if set to true, the filters row in the header will be turned off.
