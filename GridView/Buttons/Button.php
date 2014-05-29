@@ -39,6 +39,11 @@ class Button implements ButtonInterface {
 	public $tokens = array();
 
     /**
+     * @var bool
+     */
+    public $visible = true;
+
+    /**
      * Constructor
      * 
      * @param array $config
@@ -68,6 +73,10 @@ class Button implements ButtonInterface {
      */
 	public function render()
 	{
+        if( ! $this->isVisible() ) {
+            return null;
+        }
+
 		$url = $this->getUrl($this->tokens);
 		$label = $this->getLabel($this->tokens);
 		$onclick = null;
@@ -114,10 +123,13 @@ class Button implements ButtonInterface {
     /**
      * call render when this class is cast as a string
      * 
-     * @return string
+     * @return string|null
      */
 	public function __toString()
 	{
+        if( ! $this->isVisible() ) {
+            return null;
+        }
 		return $this->render();
 	}
 
@@ -134,4 +146,9 @@ class Button implements ButtonInterface {
 		}
 		return $string;
 	}
+
+    public function isVisible()
+    {
+        return $this->visible;
+    }
 }

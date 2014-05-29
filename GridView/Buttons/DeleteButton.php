@@ -21,7 +21,11 @@ class DeleteButton extends Button {
      */
     public function render()
 	{
-		$url = $this->getUrl($this->tokens);
+        if( ! $this->isVisible() ) {
+            return null;
+        }
+
+        $url = $this->getUrl($this->tokens);
 		$label = $this->getLabel($this->tokens);
 		$onclick = null;
 		if($this->confirm) {
