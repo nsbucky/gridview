@@ -729,7 +729,7 @@ MODAL;
     {
         if( is_callable($this->tableRowCss) ) {
             $func = $this->tableRowCss;
-            return $func($data);
+            return $func($data, $index);
         }
 
         return (string) $this->tableRowCss;
