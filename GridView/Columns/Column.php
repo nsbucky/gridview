@@ -298,7 +298,9 @@ class Column implements ColumnInterface {
 
         if( is_callable($this->value) ) {
             $func = $this->value;
-            return $func($this->data, $index);
+            $value =  $func($this->data, $index);
+            return $this->raw ? (string) $value
+                : htmlspecialchars( (string) $value, ENT_QUOTES );
         }
 
         if( isset($this->value) ) {
