@@ -138,13 +138,7 @@ class DataTable extends Table {
     {
         // if data source is empty show the $noResults text
         if( empty( $this->dataSource ) || count($this->dataSource) == 0 ) {
-            ob_start();
-            ?>
-            <tr>
-                <td colspan="<?php echo count($this->headers);?>"><?php echo $this->noResultsText;?></td>
-            </tr>
-            <?php
-            return ob_get_clean();
+            return null;
         }
 
         $rows = '';
