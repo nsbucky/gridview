@@ -490,6 +490,7 @@ class Table implements \ArrayAccess {
                 <form action="" method="get" id="grid-filter-form">
                     $hidden
                     $filters
+                    <input type="reset" name="reset" value="Reset Form" class="btn btn-danger modal-reset">
                 </form>
             </div>
             <div class="modal-footer">
