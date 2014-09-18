@@ -188,6 +188,7 @@ class DataTable extends Table {
                     "sPaginationType" : "bootstrap_full",
                     "bStateSave": true,
                     "bSortCellsTop" : true,
+                    "iDisplayLength" : <?php echo count( $this->dataSource); ?>,
                     "fnInitComplete" : function(oSettings, json) {
                         $('.ColVis_Button').addClass('btn btn-default btn-sm').html('Columns <i class="icon-arrow-down"></i>');
                     }
