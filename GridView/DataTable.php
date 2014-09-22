@@ -192,7 +192,8 @@ class DataTable extends Table {
                     "iDisplayLength" : <?php echo count( $this->dataSource); ?>,
                     "fnInitComplete" : function(oSettings, json) {
                         $('.ColVis_Button').addClass('btn btn-default btn-sm').html('Columns <i class="icon-arrow-down"></i>');
-                    }
+                    },
+                    "aaSorting": []
                 });
             });
         </script>
