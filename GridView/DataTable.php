@@ -102,11 +102,13 @@ class DataTable extends Table {
                 <div class="widget-body no-padding">
                     <div class="widget-body-toolbar">
                         <?php echo $this->renderModalFilters();?>
-                        <p class="pull-right">
-                            Showing <?php echo $this->dataSource->getFrom();?>
-                            to <?php echo $this->dataSource->getTo();?>
-                            of <?php echo $this->dataSource->getTotal();?>
-                        </p>
+                        <?php if( method_exists( $this->dataSource, 'getFrom' ) ):?>
+                            <p class="pull-right">
+                                Showing <?php echo $this->dataSource->getFrom();?>
+                                to <?php echo $this->dataSource->getTo();?>
+                                of <?php echo $this->dataSource->getTotal();?>
+                            </p>
+                        <?php endif;?>
                     </div>
                     <table class="<?php echo $this->tableCss;?>" id="<?php echo $this->id;?>">
                         <thead>
@@ -117,9 +119,11 @@ class DataTable extends Table {
                         <?php echo $this->renderTableBody();?>
                         </tbody>
                     </table>
-                    <div class="dt-row dt-bottom-row">
-                        <?php echo $this->dataSource->links(); ?>
-                    </div>
+                    <?php if( method_exists( $this->dataSource, 'links' ) ): ?>
+                        <div class="dt-row dt-bottom-row">
+                            <?php echo $this->dataSource->links(); ?>
+                        </div>
+                    <?php endif;?>
                 </div>
             </div>
         </div>
