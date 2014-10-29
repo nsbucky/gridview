@@ -356,9 +356,9 @@ class Table implements \ArrayAccess {
         $this->javascript .= $column->getJavaScript();
 
         // if column is not meant to be visible, like for admin reasons, take it out of the visible columns
-        if( ! $column->isVisible() ) {
-            $flip = array_flip($this->visibleColumns);
-            unset($flip[$column->name]);
+        if( !$column->isVisible() && is_array( $this->visibleColumns ) ) {
+            $flip = array_flip( $this->visibleColumns );
+            unset( $flip[$column->name] );
             $this->visibleColumns = $flip;
         }
 
