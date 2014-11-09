@@ -433,6 +433,10 @@ class Table implements \ArrayAccess {
 
             if( empty($filter) ) continue;
 
+            if( ! $c->isVisible() ) {
+                continue;
+            }
+
             $checked = null;
 
             if( $c->isVisible() ) {
