@@ -221,10 +221,8 @@ class DataTable extends Table {
 
             if( empty($filter) ) continue;
 
-            $checked = null;
-
-            if( $c->isVisible() ) {
-                $checked = 'checked="checked"';
+            if( ! $c->isVisible() ) {
+                continue;
             }
 
             $filters[] = '<div class="form-group"><label>'.$c->getHeaderName().'</label>'.$filter.'</div>';
