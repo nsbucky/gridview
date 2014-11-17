@@ -603,6 +603,8 @@ MODAL;
     {
         if(count($this->columns) > 0) return;
 
+        if( count($this->dataSource) < 1) return;
+
         $dataSample = $this->dataSource[0];
 
         if(is_object($dataSample) && method_exists($dataSample, 'toArray')) {
